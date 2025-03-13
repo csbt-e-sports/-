@@ -1,0 +1,324 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Leaderboard - CSBT E-Sports Tournament</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <style>
+        /* मुख्य स्टाइल्स */
+        body {
+            margin: 0;
+            font-family: 'Arial', sans-serif;
+            background: #000;
+            color: #fff;
+        }
+
+        /* लीडरबोर्ड सेक्शन */
+        .leaderboard-section {
+            padding: 120px 20px 60px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .leaderboard-header {
+            text-align: center;
+            margin-bottom: 50px;
+        }
+
+        .leaderboard-title {
+            color: #ffd700;
+            font-size: 2.5em;
+            margin-bottom: 15px;
+            text-transform: uppercase;
+        }
+
+        /* टॉप 3 टीम्स */
+        .top-teams {
+            display: flex;
+            justify-content: center;
+            gap: 30px;
+            margin-bottom: 50px;
+            flex-wrap: wrap;
+        }
+
+        .team-card {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 15px;
+            padding: 20px;
+            text-align: center;
+            width: 250px;
+            position: relative;
+            transition: transform 0.3s ease;
+        }
+
+        .team-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .rank-badge {
+            font-size: 24px;
+            margin-bottom: 10px;
+        }
+
+        .team-name {
+            color: #ffd700;
+            font-size: 1.2em;
+            margin: 10px 0;
+        }
+
+        .team-points {
+            color: #fff;
+            font-size: 1.5em;
+            margin: 10px 0;
+        }
+
+        /* लीडरबोर्ड टेबल */
+        .leaderboard-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 30px;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 15px;
+            overflow: hidden;
+        }
+
+        .leaderboard-table th,
+        .leaderboard-table td {
+            padding: 15px;
+            text-align: left;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .leaderboard-table th {
+            background: rgba(255, 215, 0, 0.1);
+            color: #ffd700;
+            font-weight: bold;
+        }
+
+        .leaderboard-table tr:hover {
+            background: rgba(255, 215, 0, 0.05);
+        }
+
+        /* रेस्पॉन्सिव डिज़ाइन */
+        @media (max-width: 768px) {
+            .leaderboard-section {
+                padding: 100px 15px 40px;
+            }
+
+            .team-card {
+                width: 100%;
+                max-width: 300px;
+            }
+
+            .leaderboard-table {
+                display: block;
+                overflow-x: auto;
+            }
+        }
+
+        /* नेविगेशन स्टाइल्स */
+        .navbar {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            padding: 20px 0;
+            background: rgba(0, 0, 0, 0.8);
+            z-index: 1000;
+            transition: 0.3s;
+        }
+
+        .nav-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 20px;
+        }
+
+        .logo {
+            color: #ffd700;
+            font-size: 24px;
+            font-weight: bold;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 30px;
+        }
+
+        .nav-links a {
+            color: #fff;
+            text-decoration: none;
+            font-weight: 500;
+            transition: 0.3s;
+        }
+
+        .nav-links a:hover {
+            color: #ffd700;
+        }
+
+        /* मोबाइल मेनू स्टाइल्स */
+        .mobile-menu-btn {
+            display: none;
+            color: #fff;
+            font-size: 24px;
+            cursor: pointer;
+        }
+
+        @media (max-width: 768px) {
+            .mobile-menu-btn {
+                display: block;
+            }
+
+            .nav-links {
+                display: none;
+                position: absolute;
+                top: 100%;
+                left: 0;
+                width: 100%;
+                background: rgba(0, 0, 0, 0.95);
+                padding: 20px 0;
+                flex-direction: column;
+                align-items: center;
+            }
+
+            .nav-links.active {
+                display: flex;
+            }
+
+            .nav-links a {
+                padding: 15px 0;
+                width: 100%;
+                text-align: center;
+            }
+        }
+
+        /* मुख्य स्टाइल्स */
+        html {
+            scroll-behavior: smooth;
+        }
+    </style>
+</head>
+<body>
+    <!-- नेविगेशन बार -->
+    <nav class="navbar">
+        <div class="nav-content">
+            <div class="logo">CSBT E-Sports</div>
+            <div class="mobile-menu-btn">
+                <i class="fas fa-bars"></i>
+            </div>
+            <div class="nav-links">
+                <a href="index.html">Home</a>
+                <a href="leaderboard.html">Leaderboard</a>
+                <a href="about.html">About</a>
+                <a href="blog.html">Blog</a>
+                <a href="index.html#footer">Contact Us</a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- लीडरबोर्ड सेक्शन -->
+    <section class="leaderboard-section">
+        <div class="leaderboard-header">
+            <h1 class="leaderboard-title">Tournament Leaderboard</h1>
+            <p>Top performing teams in the tournament</p>
+        </div>
+
+        <!-- टॉप 3 टीम्स -->
+        <div class="top-teams">
+            <!-- 2nd Place -->
+            <div class="team-card">
+                <div class="rank-badge">🥈</div>
+                <h3 class="team-name">Team Phoenix</h3>
+                <p class="team-points">85 Points</p>
+                <p>Matches: 5</p>
+                <p>Kills: 32</p>
+            </div>
+
+            <!-- 1st Place -->
+            <div class="team-card" style="transform: scale(1.1);">
+                <div class="rank-badge">🥇</div>
+                <h3 class="team-name">Team Dragons</h3>
+                <p class="team-points">92 Points</p>
+                <p>Matches: 5</p>
+                <p>Kills: 38</p>
+            </div>
+
+            <!-- 3rd Place -->
+            <div class="team-card">
+                <div class="rank-badge">🥉</div>
+                <h3 class="team-name">Team Warriors</h3>
+                <p class="team-points">78 Points</p>
+                <p>Matches: 5</p>
+                <p>Kills: 29</p>
+            </div>
+        </div>
+
+        <!-- लीडरबोर्ड टेबल -->
+        <table class="leaderboard-table">
+            <thead>
+                <tr>
+                    <th>Rank</th>
+                    <th>Team Name</th>
+                    <th>Matches</th>
+                    <th>Kills</th>
+                    <th>Points</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>4</td>
+                    <td>Team Ninjas</td>
+                    <td>5</td>
+                    <td>25</td>
+                    <td>70</td>
+                </tr>
+                <tr>
+                    <td>5</td>
+                    <td>Team Spartans</td>
+                    <td>5</td>
+                    <td>22</td>
+                    <td>65</td>
+                </tr>
+                <tr>
+                    <td>6</td>
+                    <td>Team Legends</td>
+                    <td>5</td>
+                    <td>20</td>
+                    <td>60</td>
+                </tr>
+                <!-- और टीम्स जोड़ें -->
+            </tbody>
+        </table>
+    </section>
+
+    <!-- फुटर यहाँ कॉपी करें -->
+
+    <script>
+        window.onload = function() {
+            window.scrollTo(0, 0);
+        }
+
+        const mobileMenuBtn = document.querySelector('.mobile-menu-btn');
+        const navLinks = document.querySelector('.nav-links');
+
+        mobileMenuBtn.addEventListener('click', () => {
+            navLinks.classList.toggle('active');
+        });
+
+        // नेविगेशन बार स्क्रॉल इफेक्ट
+        window.addEventListener('scroll', function() {
+            const navbar = document.querySelector('.navbar');
+            if (window.scrollY > 50) {
+                navbar.style.background = 'rgba(0, 0, 0, 0.9)';
+                navbar.style.padding = '15px 0';
+            } else {
+                navbar.style.background = 'rgba(0, 0, 0, 0.8)';
+                navbar.style.padding = '20px 0';
+            }
+        });
+    </script>
+</body>
+</html> 
