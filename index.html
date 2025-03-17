@@ -1,0 +1,2226 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CSBT E-Sports Tournament</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    
+    <!-- Performance optimizations -->
+    <link rel="preconnect" href="https://cdnjs.cloudflare.com">
+    <link rel="dns-prefetch" href="https://cdnjs.cloudflare.com">
+    
+    <!-- Preload critical resources -->
+    <link rel="preload" as="video" href="bg1.mp4" type="video/mp4">
+    <link rel="preload" as="video" href="TournamentDetailsBG.mp4" type="video/mp4">
+    <link rel="preload" as="video" href="WhyJoinBG.mp4" type="video/mp4">
+    <link rel="preload" as="image" href="bg-poster.jpg">
+    <link rel="preload" as="image" href="BGMI.jpg">
+    <link rel="preload" as="image" href="Image BGMI.jpg">
+    
+    <style>
+        /* Optimize animations */
+        * {
+            -webkit-backface-visibility: hidden;
+            backface-visibility: hidden;
+        }
+        
+        /* Smooth scrolling but disable for users who prefer reduced motion */
+        @media (prefers-reduced-motion: no-preference) {
+            html {
+                scroll-behavior: smooth;
+            }
+        }
+        
+        /* Optimize images for different screen sizes */
+        img {
+            max-width: 100%;
+            height: auto;
+            will-change: transform;
+        }
+        
+        /* Better touch handling for mobile */
+        @media (hover: none) {
+            .info-card,
+            .detail-box,
+            .register-btn {
+                -webkit-tap-highlight-color: transparent;
+            }
+            
+            /* Remove hover effects on mobile */
+            .info-card:hover,
+            .detail-box:hover {
+                transform: none !important;
+            }
+        }
+        
+        /* Optimize animations for better performance */
+        .info-card,
+        .detail-box,
+        .register-btn {
+            will-change: transform;
+            transform: translateZ(0);
+        }
+        
+        /* Reduce motion on mobile */
+        @media (max-width: 768px) {
+            .hero-video {
+                display: block !important;
+                position: absolute;
+                top: 0;
+                left: 0;
+                width: 100%;
+                height: 100%;
+                object-fit: cover;
+                z-index: -1;
+            }
+            
+            .hero {
+                background: none;
+            }
+            
+            .video-overlay {
+                background: linear-gradient(
+                    to bottom,
+                    rgba(0, 0, 0, 0.7),  /* 0.3 से बढ़ाकर 0.7 किया */
+                    rgba(0, 0, 0, 0.6),  /* 0.2 से बढ़ाकर 0.6 किया */
+                    rgba(0, 0, 0, 0.7)   /* 0.3 से बढ़ाकर 0.7 किया */
+                );
+            }
+            
+            /* Optimize mobile menu transitions */
+            .nav-links {
+                transition: transform 0.3s cubic-bezier(0.4, 0.0, 0.2, 1);
+                will-change: transform;
+            }
+        }
+        
+        /* Improve loading performance */
+        .lazy-load {
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+        
+        .lazy-load.loaded {
+            opacity: 1;
+        }
+
+        /* मुख्य स्टाइल्स */
+        body {
+            margin: 0;
+            font-family: 'Arial', sans-serif;
+            background: #000;
+            color: #fff;
+            overflow-x: hidden;
+        }
+
+        /* नेविगेशन */
+        .navbar {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            padding: 20px 0;
+            background: rgba(0, 0, 0, 0.8);
+            z-index: 1000;
+            transition: 0.3s;
+        }
+
+        .nav-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 20px;
+        }
+
+        .logo {
+            color: #ffd700;
+            font-size: 24px;
+            font-weight: bold;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 30px;
+        }
+
+        .nav-links a {
+            color: #fff;
+            text-decoration: none;
+            font-weight: 500;
+            transition: 0.3s;
+        }
+
+        .nav-links a:hover {
+            color: #ffd700;
+        }
+
+        /* हीरो सेक्शन */
+        .hero {
+            height: 100vh;
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            overflow: hidden;
+        }
+
+        .hero-video {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            z-index: -1;
+        }
+
+        .video-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(
+                to bottom,
+                rgba(0, 0, 0, 0.7),  /* 0.3 से बढ़ाकर 0.7 किया */
+                rgba(0, 0, 0, 0.6),  /* 0.2 से बढ़ाकर 0.6 किया */
+                rgba(0, 0, 0, 0.7)   /* 0.3 से बढ़ाकर 0.7 किया */
+            );
+        }
+
+        .hero-content {
+            position: relative;
+            z-index: 1;
+            max-width: 800px;
+            padding: 20px;
+        }
+
+        .hero-content h1 {
+            font-size: 4em;
+            margin-bottom: 20px;
+            color: #ffd700;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+        }
+
+        .hero-content p {
+            font-size: 1.5em;
+            margin-bottom: 30px;
+        }
+
+        /* रजिस्ट्रेशन बटन */
+        .register-btn {
+            display: inline-block;
+            padding: 15px 30px;
+            background: linear-gradient(45deg, #ffd700, #ff9900);
+            color: #000;
+            text-decoration: none;
+            border-radius: 25px;
+            font-weight: bold;
+            transition: 0.3s;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .register-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px rgba(255, 215, 0, 0.3);
+        }
+
+        /* टूर्नामेंट हाइलाइट्स */
+        .tournament-info {
+            padding: 80px 20px;
+            background: linear-gradient(to bottom, #000, #111);
+        }
+
+        .info-container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .info-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 30px;
+            margin-top: 40px;
+        }
+
+        .info-card {
+            background: rgba(255, 255, 255, 0.05);
+            padding: 30px;
+            border-radius: 15px;
+            text-align: center;
+            transition: 0.3s;
+        }
+
+        .info-card:hover {
+            transform: translateY(-10px);
+            background: rgba(255, 215, 0, 0.1);
+        }
+
+        .info-card i {
+            font-size: 40px;
+            color: #ffd700;
+            margin-bottom: 20px;
+        }
+
+        .info-card h3 {
+            color: #ffd700;
+            margin-bottom: 15px;
+        }
+
+        /* प्राइज पूल सेक्शन */
+        .prize-pool {
+            padding: 80px 20px;
+            background: #111;
+            text-align: center;
+        }
+
+        .prize-amount {
+            font-size: 3em;
+            color: #ffd700;
+            margin: 20px 0;
+        }
+
+        /* टाइमलाइन सेक्शन */
+        .timeline {
+            padding: 80px 20px;
+            background: #000;
+        }
+
+        .timeline-container {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .timeline-item {
+            padding: 20px;
+            margin: 20px 0;
+            border-left: 3px solid #ffd700;
+            position: relative;
+        }
+
+        .timeline-item::before {
+            content: '';
+            position: absolute;
+            left: -8px;
+            top: 50%;
+            width: 15px;
+            height: 15px;
+            background: #ffd700;
+            border-radius: 50%;
+        }
+
+        /* फुटर */
+        footer {
+            padding: 40px 20px;
+            background: #111;
+            text-align: center;
+        }
+
+        .social-links {
+            margin: 20px 0;
+        }
+
+        .social-links a {
+            color: #fff;
+            margin: 0 10px;
+            font-size: 24px;
+            transition: 0.3s;
+        }
+
+        .social-links a:hover {
+            color: #ffd700;
+        }
+
+        /* मोबाइल रेस्पॉन्सिवनेस */
+        @media (max-width: 768px) {
+            .hero-content h1 {
+                font-size: 2.5em;
+            }
+
+            .hero-content p {
+                font-size: 1.2em;
+            }
+
+            .nav-links {
+                display: none;
+            }
+
+            .mobile-menu {
+                display: block;
+            }
+        }
+
+        @keyframes glow {
+            0%, 100% { opacity: 0.5; width: 50px; }
+            50% { opacity: 1; width: 100px; }
+        }
+
+        .register-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 
+                0 8px 25px rgba(255, 215, 0, 0.4),
+                0 0 30px rgba(255, 215, 0, 0.2);
+            background: linear-gradient(45deg, #ff9900, #ffd700);
+        }
+
+        .register-btn:active {
+            transform: translateY(1px);
+        }
+
+        /* मोबाइल मेनू बटन */
+        .mobile-menu-btn {
+            display: none;
+            color: #fff;
+            font-size: 24px;
+            cursor: pointer;
+        }
+
+        /* मोबाइल रेस्पॉन्सिवनेस */
+        @media (max-width: 768px) {
+            .mobile-menu-btn {
+                display: block;
+            }
+
+            .nav-links {
+                display: none;
+                position: absolute;
+                top: 100%;
+                left: 0;
+                width: 100%;
+                background: rgba(0, 0, 0, 0.95);
+                padding: 20px 0;
+                flex-direction: column;
+                align-items: center;
+            }
+
+            .nav-links.active {
+                display: flex;
+            }
+
+            .nav-links a {
+                padding: 15px 0;
+                width: 100%;
+                text-align: center;
+            }
+
+            /* फुटर मोबाइल स्टाइल्स */
+            footer > div:first-child {
+                grid-template-columns: 1fr !important;
+                gap: 40px !important;
+                padding: 0 20px !important;
+            }
+
+            footer h3 {
+                text-align: center;
+            }
+
+            footer p {
+                text-align: center;
+            }
+
+            footer .social-links {
+                justify-content: center;
+            }
+
+            /* न्यूजलेटर फॉर्म */
+            footer .newsletter-form {
+                flex-direction: column;
+                gap: 10px;
+            }
+
+            footer .newsletter-form button {
+                width: 100%;
+            }
+
+            /* बॉटम फुटर */
+            footer .bottom-footer {
+                flex-direction: column;
+                gap: 15px;
+            }
+
+            footer .bottom-footer div {
+                flex-direction: column;
+                gap: 10px;
+            }
+
+            footer .bottom-footer a {
+                margin: 5px 0;
+            }
+        }
+
+        /* मोबाइल रेस्पॉन्सिवनेस अपडेट */
+        @media (max-width: 768px) {
+            /* नेविगेशन फिक्स */
+            .navbar {
+                padding: 15px 0;
+            }
+
+            .nav-content {
+                padding: 0 15px;
+            }
+
+            .logo {
+                font-size: 20px;
+            }
+
+            /* हीरो सेक्शन फिक्स */
+            .hero {
+                padding-top: 70px; /* नेविगेशन बार की हाइट के लिए स्पेस */
+            }
+
+            .hero-content {
+                padding: 20px 15px;
+            }
+
+            /* मेन टाइटल फिक्स */
+            .hero-content h1 {
+                font-size: 2.5em !important;
+                margin-bottom: 15px !important;
+            }
+
+            /* सबटाइटल फिक्स */
+            .hero-content p {
+                font-size: 1.2em !important;
+                margin-bottom: 20px !important;
+            }
+
+            /* लाइटनिंग आइकन फिक्स */
+            .hero-content span {
+                font-size: 35px !important;
+                margin-bottom: 15px !important;
+            }
+
+            /* BGMI इमेज फिक्स */
+            .hero-content img {
+                max-width: 250px !important;
+            }
+
+            /* Announced टेक्स्ट फिक्स */
+            .hero-content .announced-text {
+                font-size: 1.8em !important;
+                letter-spacing: 3px !important;
+            }
+
+            /* टूर्नामेंट डिटेल्स सेक्शन फिक्स */
+            .tournament-details {
+                padding: 40px 15px !important;
+            }
+
+            .details-grid {
+                grid-template-columns: 1fr !important;
+            }
+
+            .detail-box {
+                padding: 20px !important;
+            }
+
+            /* WHY JOIN सेक्शन फिक्स */
+            .why-join {
+                padding: 40px 15px !important;
+            }
+
+            .why-join h2 {
+                font-size: 2em !important;
+            }
+
+            .why-join .info-container > div {
+                grid-template-columns: 1fr !important;
+            }
+
+            /* फुटर फिक्स */
+            footer {
+                padding: 40px 15px !important;
+            }
+
+            footer > div:first-child {
+                grid-template-columns: 1fr !important;
+                gap: 30px !important;
+            }
+
+            /* सामान्य टेक्स्ट साइज फिक्स */
+            h2 {
+                font-size: 2em !important;
+            }
+
+            h3 {
+                font-size: 1.5em !important;
+            }
+
+            p {
+                font-size: 1em !important;
+            }
+        }
+
+        /* छोटे मोबाइल के लिए अतिरिक्त फिक्स */
+        @media (max-width: 480px) {
+            .hero-content h1 {
+                font-size: 2em !important;
+            }
+
+            .hero-content p {
+                font-size: 1em !important;
+            }
+
+            .hero-content img {
+                max-width: 200px !important;
+            }
+        }
+
+        /* मुख्य स्टाइल्स */
+        html {
+            scroll-behavior: smooth;
+            scroll-padding-top: 80px; /* नेविगेशन बार की हाइट के लिए पैडिंग */
+        }
+
+        /* For Safari browser compatibility */
+        @media screen and (-webkit-min-device-pixel-ratio: 0) {
+            html {
+                scroll-behavior: auto;
+            }
+            body {
+                scroll-behavior: smooth;
+            }
+        }
+
+        /* Disable smooth scrolling for users who prefer reduced motion */
+        @media (prefers-reduced-motion: reduce) {
+            html {
+                scroll-behavior: auto;
+            }
+        }
+
+        /* मोबाइल ऑप्टिमाइज़ेशन */
+        @media (max-width: 768px) {
+            .details-bg-video {
+                display: block !important;
+            }
+            
+            .tournament-details {
+                background: none !important;
+            }
+        }
+        
+        /* वीडियो परफॉर्मेंस ऑप्टिमाइज़ेशन */
+        .details-bg-video {
+            will-change: transform;
+            transform: translateZ(0);
+        }
+
+        /* मोबाइल ऑप्टिमाइजेशन अपडेट्स */
+        @media (max-width: 768px) {
+            /* टेबल स्क्रॉलिंग फिक्स */
+            .details-grid, .info-grid {
+                overflow-x: auto;
+                -webkit-overflow-scrolling: touch;
+                padding-bottom: 15px;
+            }
+
+            /* टेक्स्ट साइज ऑप्टिमाइजेशन */
+            .hero-content h1 {
+                font-size: 2em !important;
+                margin-bottom: 10px !important;
+            }
+
+            .hero-content p {
+                font-size: 1em !important;
+                margin-bottom: 15px !important;
+            }
+
+            /* बटन साइज ऑप्टिमाइजेशन */
+            .register-btn {
+                padding: 12px 25px !important;
+                font-size: 0.9em !important;
+            }
+
+            /* सेक्शन पैडिंग ऑप्टिमाइजेशन */
+            .tournament-info,
+            .tournament-details,
+            .why-join {
+                padding: 40px 15px !important;
+            }
+
+            /* कार्ड और बॉक्स साइज ऑप्टिमाइजेशन */
+            .info-card,
+            .detail-box {
+                padding: 20px !important;
+                margin-bottom: 15px !important;
+            }
+
+            .info-card h3,
+            .detail-box h3 {
+                font-size: 1.2em !important;
+            }
+
+            .info-card p,
+            .detail-box p {
+                font-size: 0.9em !important;
+            }
+
+            /* आइकन साइज ऑप्टिमाइजेशन */
+            .info-card i,
+            .detail-box i {
+                font-size: 30px !important;
+            }
+
+            /* सोशल मीडिया लिंक्स ऑप्टिमाइजेशन */
+            .social-links a {
+                font-size: 20px !important;
+                margin: 0 8px !important;
+            }
+
+            /* फुटर ऑप्टिमाइजेशन */
+            footer {
+                padding: 30px 15px !important;
+            }
+
+            footer h3 {
+                font-size: 1.2em !important;
+                margin-bottom: 15px !important;
+            }
+
+            footer p {
+                font-size: 0.9em !important;
+            }
+        }
+
+        /* छोटे मोबाइल डिवाइस के लिए अतिरिक्त ऑप्टिमाइजेशन */
+        @media (max-width: 480px) {
+            .hero-content h1 {
+                font-size: 1.8em !important;
+            }
+
+            .hero-content p {
+                font-size: 0.9em !important;
+            }
+
+            .register-btn {
+                padding: 10px 20px !important;
+                font-size: 0.85em !important;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .register-btn {
+                font-size: 1.2em !important;
+                padding: 18px 35px !important;
+                width: 80% !important;
+                display: block !important;
+                margin: 20px auto !important;
+                text-align: center !important;
+                position: relative !important;
+                left: 50% !important;
+                transform: translateX(-50%) !important;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .register-btn {
+                font-size: 1.1em !important;
+                padding: 16px 30px !important;
+                width: 90% !important;
+                display: block !important;
+                margin: 20px auto !important;
+                text-align: center !important;
+                position: relative !important;
+                left: 50% !important;
+                transform: translateX(-50%) !important;
+            }
+        }
+
+        /* Update the register button's hover effect for mobile */
+        @media (max-width: 768px) {
+            .register-btn:hover {
+                transform: translateX(-50%) translateY(-3px) !important;
+            }
+            
+            .register-btn:active {
+                transform: translateX(-50%) translateY(1px) !important;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .info-container {
+                gap: 15px;  /* Reduce gap between boxes */
+                padding: 10px;  /* Add some padding */
+            }
+            
+            .box {
+                padding: 20px;  /* Reduce padding */
+                margin-bottom: 15px;  /* Add space between boxes */
+            }
+            
+            .icon {
+                font-size: 35px;  /* Reduce icon size */
+                margin-bottom: 10px;  /* Reduce margin */
+            }
+            
+            h3 {
+                font-size: 18px;  /* Reduce heading size */
+                margin-bottom: 8px;  /* Reduce margin */
+            }
+            
+            p {
+                font-size: 14px;  /* Reduce paragraph text size */
+                margin-bottom: 12px;  /* Reduce margin */
+                line-height: 1.4;  /* Adjust line height */
+            }
+            
+            .btn {
+                padding: 8px 20px;  /* Reduce button padding */
+                font-size: 14px;  /* Reduce button text size */
+            }
+        }
+
+        /* Even smaller screens */
+        @media (max-width: 480px) {
+            .box {
+                padding: 15px;  /* Further reduce padding */
+            }
+            
+            .icon {
+                font-size: 30px;  /* Further reduce icon size */
+            }
+            
+            h3 {
+                font-size: 16px;  /* Further reduce heading size */
+            }
+            
+            p {
+                font-size: 13px;  /* Further reduce text size */
+                margin-bottom: 10px;
+            }
+            
+            .btn {
+                padding: 6px 16px;  /* Further reduce button size */
+                font-size: 13px;
+            }
+            
+            .info-container {
+                grid-template-columns: 1fr;  /* Single column layout */
+                max-width: 100%;  /* Full width */
+                gap: 10px;  /* Reduce gap further */
+            }
+        }
+
+        /* एनिमेटेड बैकग्राउंड के लिए अपडेटेड स्टाइल्स */
+        .animated-bg {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -2;
+            background: linear-gradient(
+                45deg,
+                #000000,
+                #ff0055,  /* पिंक */
+                #00ff88,  /* ग्रीन */
+                #ff6b6b,  /* लाइट रेड */
+                #4d4dff,  /* ब्लू */
+                #ff9900,  /* ऑरेंज */
+                #9900ff,  /* पर्पल */
+                #00ffff,  /* साइयन */
+                #000000
+            );
+            background-size: 400% 400%;
+            animation: gradientBG 10s ease infinite;
+            opacity: 0.85;
+        }
+
+        .bg-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            background: rgba(0, 0, 0, 0.15);
+        }
+
+        @keyframes gradientBG {
+            0% {
+                background-position: 0% 50%;
+            }
+            50% {
+                background-position: 100% 50%;
+            }
+            100% {
+                background-position: 0% 50%;
+            }
+        }
+
+        /* Add this CSS for mobile optimization */
+        @media (max-width: 768px) {
+            .details-grid {
+                grid-template-columns: 1fr !important;  /* सिंगल कॉलम लेआउट */
+                gap: 15px !important;  /* गैप कम किया */
+                padding: 0 !important;  /* पैडिंग हटाई */
+            }
+
+            .detail-box {
+                margin: 10px 0 !important;  /* मार्जिन अपडेट की */
+                padding: 15px !important;  /* पैडिंग कम की */
+            }
+
+            .detail-box img {
+                max-width: 100% !important;  /* इमेज साइज फिक्स्ड की */
+                height: auto !important;
+            }
+
+            .detail-box h3 {
+                font-size: 1.2em !important;  /* फॉन्ट साइज कम किया */
+                margin: 10px 0 !important;
+            }
+
+            .detail-box p {
+                font-size: 0.9em !important;  /* टेक्स्ट साइज कम किया */
+                margin: 8px 0 !important;
+            }
+
+            /* Register Now बटन के लिए */
+            .register-btn {
+                width: 90% !important;  /* बटन की चौड़ाई बढ़ाई */
+                margin: 15px auto !important;
+                padding: 12px 20px !important;
+                font-size: 1em !important;
+            }
+
+            /* Prize Pool टेक्स्ट के लिए */
+            .prize-amount {
+                font-size: 1.8em !important;
+            }
+
+            /* काउंटडाउन टाइमर के लिए */
+            #countdown {
+                padding: 10px !important;
+            }
+
+            #countdown span {
+                font-size: 1.5em !important;
+            }
+        }
+
+        /* और छोटी स्क्रीन के लिए अतिरिक्त फिक्स */
+        @media (max-width: 480px) {
+            .detail-box {
+                padding: 12px !important;
+            }
+
+            .detail-box h3 {
+                font-size: 1.1em !important;
+            }
+
+            .detail-box p {
+                font-size: 0.85em !important;
+            }
+
+            .register-btn {
+                width: 95% !important;
+                padding: 10px 15px !important;
+            }
+        }
+    </style>
+    <!-- Add video optimization -->
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const videos = document.querySelectorAll('video');
+            videos.forEach(video => {
+                // Set video loading priority
+                video.setAttribute('importance', 'high');
+                // Enable hardware acceleration
+                video.style.transform = 'translateZ(0)';
+                video.style.willChange = 'transform';
+                // Optimize memory usage
+                video.addEventListener('loadeddata', function() {
+                    video.play().catch(function(error) {
+                        console.log("Video autoplay failed:", error);
+                    });
+                });
+            });
+        });
+    </script>
+</head>
+<body>
+    <!-- नेविगेशन बार -->
+    <nav class="navbar">
+        <div class="nav-content">
+            <div class="logo">CSBT E-Sports</div>
+            <div class="mobile-menu-btn">
+                <i class="fas fa-bars"></i>
+            </div>
+            <div class="nav-links">
+                <a href="#home">Home</a>
+                <a href="leaderboard.html">Leaderboard</a>
+                <a href="about.html">About</a>
+                <a href="blog.html">Blog</a>
+                <a href="#contact-section">Contact Us</a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- हीरो सेक्शन -->
+    <section id="home" class="hero">
+        <!-- वीडियो को हटा दिया -->
+        <div class="video-overlay" style="
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(
+                to bottom,
+                rgba(0, 0, 0, 0.7),
+                rgba(0, 0, 0, 0.6),
+                rgba(0, 0, 0, 0.7)
+            );
+        "></div>
+        <div class="hero-content" style="text-align: center; position: relative;">
+            <!-- Glowing Effect Container -->
+            <div style="position: relative; display: inline-block;">
+                <!-- Lightning Icon -->
+                <span style="font-size: 50px; color: #ffd700; text-shadow: 0 0 20px #ffd700; margin-bottom: 20px; display: block;">⚡</span>
+                
+                <!-- Main Title -->
+                <h1 style="
+                    font-size: 4.5em;
+                    margin-bottom: 20px;
+                    color: #fff;
+                    text-transform: uppercase;
+                    letter-spacing: 2px;
+                    font-weight: 800;
+                    text-shadow: 
+                        0 0 10px rgba(255, 215, 0, 0.5),
+                        0 0 20px rgba(255, 215, 0, 0.3),
+                        0 0 30px rgba(255, 215, 0, 0.1);
+                    background: linear-gradient(45deg, #fff, #ffd700);
+                    -webkit-background-clip: text;
+                    -webkit-text-fill-color: transparent;
+                    position: relative;
+                ">
+                    CSBT E-Sports Tournament
+                </h1>
+
+                <!-- Animated Line -->
+                <div style="
+                    width: 100px;
+                    height: 4px;
+                    background: linear-gradient(90deg, transparent, #ffd700, transparent);
+                    margin: 20px auto;
+                    animation: glow 2s infinite;
+                "></div>
+
+                <!-- Subtitle -->
+                <p style="
+                    font-size: 1.8em;
+                    margin-bottom: 40px;
+                    color: #fff;
+                    text-shadow: 0 0 10px rgba(255, 255, 255, 0.5);
+                    font-weight: 300;
+                    letter-spacing: 1px;
+                ">Experience the Ultimate BGMI Battle</p>
+
+                <!-- BGMI Image -->
+                <div style="margin: 30px auto; max-width: 300px;">
+                    <img src="BGMI.jpg" alt="BGMI" style="
+                        width: 100%;
+                        border-radius: 20px;
+                        box-shadow: 
+                            0 0 30px rgba(255, 215, 0, 0.3),
+                            0 0 60px rgba(255, 215, 0, 0.1);
+                        border: 3px solid #ffd700;
+                        padding: 5px;
+                        background: rgba(0, 0, 0, 0.3);
+                        transition: transform 0.3s ease, box-shadow 0.3s ease;
+                    ">
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Social Media Links Section -->
+    <section style="position: relative; padding: 80px 20px; background: transparent; overflow: hidden;">
+        <!-- वीडियो को हटा दिया -->
+        <div style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0, 0, 0, 0.3); z-index: -1;"></div>
+        <!-- Add overlay -->
+        <div style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0, 0, 0, 0.3); z-index: -1;"></div>
+
+        <!-- YouTube Video Section -->
+        <div style="max-width: 800px; margin: 0 auto 40px auto; position: relative; z-index: 1;">
+            <!-- Added text above video -->
+            <h3 style="
+                color: #ffd700; 
+                text-align: center; 
+                margin-bottom: 20px; 
+                font-size: 1.5em;
+                text-shadow: 0 0 10px rgba(255, 215, 0, 0.3);">
+                For registration, please check the YouTube video
+            </h3>
+            
+            <div style="position: relative; padding-bottom: 56.25%; height: 0; overflow: hidden; border-radius: 15px; box-shadow: 0 0 30px rgba(255, 215, 0, 0.3);">
+                <iframe 
+                    style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; border: none;"
+                    src="https://www.youtube.com/embed/YOUR_VIDEO_ID" 
+                    title="Tournament Video"
+                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
+                    allowfullscreen>
+                </iframe>
+            </div>
+        </div>
+
+        <div class="info-container" style="max-width: 1200px; margin: 0 auto; position: relative; z-index: 1;">
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 30px;">
+                <!-- YouTube Box -->
+                <div style="background: rgba(255, 0, 0, 0.35);
+                    backdrop-filter: blur(15px);
+                    border: 1px solid rgba(255, 0, 0, 0.4);
+                    box-shadow: 0 0 20px rgba(255, 0, 0, 0.2);
+                    padding: 30px; 
+                    border-radius: 15px; 
+                    text-align: center; 
+                    transition: transform 0.3s ease;"
+                    onmouseover="this.style.transform='translateY(-5px)'"
+                    onmouseout="this.style.transform='translateY(0)'">
+                    <i class="fab fa-youtube" style="font-size: 50px; color: #ff0000; margin-bottom: 20px; text-shadow: 0 0 15px rgba(255, 0, 0, 0.5);"></i>
+                    <h3 style="color: #fff; margin-bottom: 15px; text-shadow: 0 0 10px rgba(255, 0, 0, 0.3);">Join us on YouTube</h3>
+                    <p style="color: #ccc; margin-bottom: 20px;">Watch live match streams and tournament highlights</p>
+                    <a href="https://www.youtube.com/channel/UCpQUoGyGSPX0Vj-Qz_IBnlQ" target="_blank" 
+                       style="display: inline-block; padding: 10px 25px; background: #ff0000; color: #fff; text-decoration: none; border-radius: 25px; transition: all 0.3s ease; box-shadow: 0 0 15px rgba(255, 0, 0, 0.3);"
+                       onmouseover="this.style.background='#cc0000'" 
+                       onmouseout="this.style.background='#ff0000'">
+                        Subscribe Now
+                    </a>
+                </div>
+
+                <!-- Instagram Box -->
+                <div style="
+                    background: linear-gradient(45deg, rgba(405, 0, 126, 0.4), rgba(188, 42, 141, 0.4));
+                    backdrop-filter: blur(15px);
+                    border: 1px solid rgba(188, 42, 141, 0.4);
+                    box-shadow: 0 0 20px rgba(188, 42, 141, 0.2);
+                    padding: 30px; 
+                    border-radius: 15px; 
+                    text-align: center; 
+                    transition: all 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease;"
+                    onmouseover="this.style.transform='translateY(-5px)';
+                                 this.style.boxShadow='0 0 30px rgba(188, 42, 141, 0.6), 0 0 50px rgba(188, 42, 141, 0.3), 0 0 70px rgba(188, 42, 141, 0.1)';
+                                 this.style.borderColor='rgba(188, 42, 141, 0.8)';"
+                    onmouseout="this.style.transform='translateY(0)';
+                                this.style.boxShadow='0 0 20px rgba(188, 42, 141, 0.2)';
+                                this.style.borderColor='rgba(188, 42, 141, 0.4)'">
+                    <i class="fab fa-instagram" style="font-size: 50px; color: #e1306c; margin-bottom: 20px; text-shadow: 0 0 15px rgba(225, 48, 108, 0.5);"></i>
+                    <h3 style="color: #fff; margin-bottom: 15px; text-shadow: 0 0 10px rgba(225, 48, 108, 0.3);">Join us on Instagram</h3>
+                    <p style="color: #ccc; margin-bottom: 20px;">Stay updated with latest tournament news and announcements</p>
+                    <a href="https://www.instagram.com/csbt_esports/" target="_blank" 
+                       style="display: inline-block; padding: 10px 25px; background: linear-gradient(45deg, #405DE6, #5851DB, #833AB4, #C13584, #E1306C, #FD1D1D); color: #fff; text-decoration: none; border-radius: 25px; transition: all 0.3s ease; box-shadow: 0 0 15px rgba(225, 48, 108, 0.3);"
+                       onmouseover="this.style.opacity='0.9'" 
+                       onmouseout="this.style.opacity='1'">
+                        Follow Us
+                    </a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Tournament Details Section -->
+    <section style="position: relative; padding: 80px 20px; background: transparent; overflow: hidden;">
+        <div style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0, 0, 0, 0.7); z-index: -1;"></div>
+        <div class="info-container" style="position: relative; z-index: 1;">
+            <h2 style="text-align: center; color: #ffd700; font-size: 2.5em; margin-bottom: 50px; text-shadow: 0 0 20px rgba(255, 215, 0, 0.5);">Tournament Details</h2>
+            <div class="details-grid" style="
+                display: grid; 
+                grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); 
+                gap: 30px;
+                padding: 10px;">
+
+                <!-- BGMI Box -->
+                <div class="detail-box" style="
+                    background: #111; 
+                    padding: 20px;
+                    border-radius: 15px; 
+                    text-align: center;
+                    border: 2px solid #ffd700;
+                    box-shadow: 0 0 20px rgba(255, 215, 0, 0.2);
+                    transition: all 0.3s ease;
+                    margin-bottom: 15px;
+                    width: 100%;
+                    box-sizing: border-box;">
+                    
+                    <img src="Image BGMI.jpg" alt="BGMI" style="width: 100%; max-width: 300px; border-radius: 10px; margin-bottom: 20px; border: 3px solid #ffd700;">
+                    <h3 style="color: #ffd700; margin-bottom: 15px; text-shadow: 0 0 10px rgba(255, 215, 0, 0.5);">Battlegrounds Mobile India (BGMI)</h3>
+                    <div style="text-align: left; margin-left: 20px;">
+                        <p style="color: #fff; font-size: 1.1em; margin: 10px 0;">🗺️ Map: ALL</p>
+                        <p style="color: #fff; font-size: 1.1em; margin: 10px 0;">👥 Squad: 4 players</p>
+                        <p style="color: #fff; font-size: 1.1em; margin: 10px 0;">💰 Entry Fee: ₹199 per team</p>
+                        <p style="color: #fff; font-size: 1.1em; margin: 10px 0;">🔞 Age Limit: Minimum 16 years old</p>
+                        <p style="color: #fff; font-size: 1.1em; margin: 10px 0;">🏆 Rank & Level: Platinum V or higher rank and at least level 25</p>
+                    </div>
+                </div>
+
+                <!-- Join Tournament Box -->
+                <div class="detail-box" style="
+                    background: #111; 
+                    padding: 20px;
+                    border-radius: 15px; 
+                    text-align: center;
+                    border: 2px solid #ffd700;
+                    box-shadow: 0 0 20px rgba(255, 215, 0, 0.2);
+                    transition: all 0.3s ease;
+                    margin-bottom: 15px;
+                    width: 100%;
+                    box-sizing: border-box;">
+                    
+                    <h3 style="color: #ffd700; margin-bottom: 25px; text-shadow: 0 0 10px rgba(255, 215, 0, 0.5);">Join Tournament</h3>
+                    <p style="color: #fff; margin-bottom: 20px; font-size: 1.1em;">Ready to compete? Register your team now!</p>
+                    <div style="text-align: left; margin-left: 20px; margin-bottom: 30px;">
+                        <p style="color: #fff; font-size: 1.1em; margin: 10px 0;">✅ Professional Tournament Structure</p>
+                        <p style="color: #fff; font-size: 1.1em; margin: 10px 0;">🎥 Live Streaming of All Matches</p>
+                        <p style="color: #fff; font-size: 1.1em; margin: 10px 0;">🎙️ Expert Commentary</p>
+                        <p style="color: #fff; font-size: 1.1em; margin: 10px 0;">🛡️ Anti-Cheat Protection</p>
+                    </div>
+                    <a href="info1.html" class="register-btn" style="
+                        margin-top: 20px;
+                        background: linear-gradient(45deg, #ffd700, #ff9900);
+                        padding: 20px 40px;  /* पैडिंग कम की */
+                        border-radius: 35px;
+                        color: #000;
+                        text-decoration: none;
+                        font-weight: bold;
+                        text-transform: uppercase;
+                        letter-spacing: 2px;
+                        font-size: 1.3em;    /* फॉन्ट साइज़ थोड़ा कम किया */
+                        transition: all 0.3s ease;
+                        box-shadow: 
+                            0 0 20px rgba(255, 215, 0, 0.4),
+                            0 0 40px rgba(255, 215, 0, 0.2);
+                        display: inline-block;
+                        min-width: 220px;    /* न्यूनतम चौड़ाई कम की */
+                        text-align: center;
+                        position: relative;
+                        overflow: hidden;
+                        z-index: 1;
+                        "
+                        onmouseover="this.style.transform='translateY(-5px) scale(1.05)'; 
+                                     this.style.boxShadow='0 0 30px rgba(255, 215, 0, 0.6), 0 0 50px rgba(255, 215, 0, 0.3)'"
+                        onmouseout="this.style.transform='translateY(0) scale(1)'; 
+                                    this.style.boxShadow='0 0 20px rgba(255, 215, 0, 0.4), 0 0 40px rgba(255, 215, 0, 0.2)'">
+                        <i class="fas fa-gamepad" style="margin-right: 10px;"></i>
+                        Register Now
+                    </a>
+
+                    <!-- Registration Dates and Countdown -->
+                    <div style="margin-top: 30px; padding: 20px; background: rgba(255, 215, 0, 0.1); border-radius: 15px;">
+                        <div style="margin-bottom: 20px;">
+                            <p style="color: #ffd700; font-size: 1.2em; margin-bottom: 10px; font-weight: bold;">Registration Period</p>
+                            <p style="color: #fff; margin: 5px 0;">End: 01/07/2025</p>
+                            <p style="color: #fff; margin: 5px 0;">Game Start: To be announced soon</p>
+                        </div>
+                        
+                        <div id="countdown" style="
+                            padding: 15px;
+                            background: rgba(255, 215, 0, 0.15);
+                            border-radius: 10px;
+                            margin-top: 15px;">
+                            <p style="color: #ffd700; font-size: 1.1em; margin-bottom: 10px;">Registration Ends In:</p>
+                            <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px;">
+                                <div style="text-align: center;">
+                                    <span id="days" style="color: #ffd700; font-size: 1.8em; font-weight: bold;">00</span>
+                                    <p style="color: #fff; font-size: 0.9em; margin-top: 5px;">Days</p>
+                                </div>
+                                <div style="text-align: center;">
+                                    <span id="hours" style="color: #ffd700; font-size: 1.8em; font-weight: bold;">00</span>
+                                    <p style="color: #fff; font-size: 0.9em; margin-top: 5px;">Hours</p>
+                                </div>
+                                <div style="text-align: center;">
+                                    <span id="minutes" style="color: #ffd700; font-size: 1.8em; font-weight: bold;">00</span>
+                                    <p style="color: #fff; font-size: 0.9em; margin-top: 5px;">Minutes</p>
+                                </div>
+                                <div style="text-align: center;">
+                                    <span id="seconds" style="color: #ffd700; font-size: 1.8em; font-weight: bold;">00</span>
+                                    <p style="color: #fff; font-size: 0.9em; margin-top: 5px;">Seconds</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Prize Pool Box -->
+                <div style="
+                    background: #111; 
+                    padding: 20px;
+                    border-radius: 15px; 
+                    text-align: center;
+                    border: 2px solid #ffd700;
+                    box-shadow: 0 0 20px rgba(255, 215, 0, 0.2);
+                    transition: all 0.3s ease;
+                    margin-bottom: 15px;
+                    width: 100%;
+                    box-sizing: border-box;">
+                    
+                    <h3 style="color: #fff; font-size: 28px; margin-bottom: 25px; text-shadow: 0 0 10px rgba(255, 255, 255, 0.5);">Prize Pool Distribution</h3>
+                    <p style="font-size: 32px; color: #ffd700; margin-bottom: 40px; font-weight: bold; text-shadow: 0 0 20px rgba(255, 215, 0, 0.5);">Total: ₹1,00,000</p>
+                    
+                    <div style="background: #1a1a1a; padding: 25px; border-radius: 15px; border: 1px solid rgba(255, 215, 0, 0.3);">
+                        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; padding-bottom: 12px; border-bottom: 1px solid rgba(255, 215, 0, 0.2);">
+                            <span style="color: #fff; font-size: 18px; text-shadow: 0 0 5px rgba(255, 255, 255, 0.3);">🥇 1st Place - </span>
+                            <span style="color: #ffd700; font-size: 20px; font-weight: bold; text-shadow: 0 0 10px rgba(255, 215, 0, 0.5);">₹50,000</span>
+                        </div>
+                        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; padding-bottom: 12px; border-bottom: 1px solid rgba(255, 215, 0, 0.2);">
+                            <span style="color: #fff; font-size: 18px; text-shadow: 0 0 5px rgba(255, 255, 255, 0.3);">🥈 2nd Place - </span>
+                            <span style="color: #ffd700; font-size: 20px; font-weight: bold; text-shadow: 0 0 10px rgba(255, 215, 0, 0.5);">₹25,000</span>
+                        </div>
+                        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; padding-bottom: 12px; border-bottom: 1px solid rgba(255, 215, 0, 0.2);">
+                            <span style="color: #fff; font-size: 18px; text-shadow: 0 0 5px rgba(255, 255, 255, 0.3);">🥉 3rd Place - </span>
+                            <span style="color: #ffd700; font-size: 20px; font-weight: bold; text-shadow: 0 0 10px rgba(255, 215, 0, 0.5);">₹15,000</span>
+                        </div>
+                        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; padding-bottom: 12px; border-bottom: 1px solid rgba(255, 215, 0, 0.2);">
+                            <span style="color: #fff; font-size: 18px; text-shadow: 0 0 5px rgba(255, 255, 255, 0.3);">🏅 4th Place - </span>
+                            <span style="color: #ffd700; font-size: 20px; font-weight: bold; text-shadow: 0 0 10px rgba(255, 215, 0, 0.5);">₹6,000</span>
+                        </div>
+                        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; padding-bottom: 12px; border-bottom: 1px solid rgba(255, 215, 0, 0.2);">
+                            <span style="color: #fff; font-size: 18px; text-shadow: 0 0 5px rgba(255, 255, 255, 0.3);">🏅 5th Place - </span>
+                            <span style="color: #ffd700; font-size: 20px; font-weight: bold; text-shadow: 0 0 10px rgba(255, 215, 0, 0.5);">₹4,000</span>
+                        </div>
+                        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; padding-bottom: 12px; border-bottom: 1px solid rgba(255, 215, 0, 0.2);">
+                            <span style="color: #fff; font-size: 18px; text-shadow: 0 0 5px rgba(255, 255, 255, 0.3);">🏅 Team 6 to Team 16 - </span>
+                            <span style="color: #ffd700; font-size: 20px; font-weight: bold; text-shadow: 0 0 10px rgba(255, 215, 0, 0.5);">1K per team</span>
+                        </div>
+                        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; padding-bottom: 12px; border-bottom: 1px solid rgba(255, 215, 0, 0.2);">
+                            <span style="color: #fff; font-size: 18px; text-shadow: 0 0 5px rgba(255, 255, 255, 0.3);">🎮 Grand Finale</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- WHY JOIN Section -->
+    <section style="position: relative; padding: 80px 20px; background: transparent; overflow: hidden;">
+        <!-- वीडियो को हटा दिया -->
+        <div style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0, 0, 0, 0.7); z-index: -1;"></div>
+        <div class="info-container" style="position: relative; z-index: 1;">
+            <h2 style="text-align: center; color: #ffd700; font-size: 2.5em; margin-bottom: 50px; text-shadow: 0 0 20px rgba(255, 215, 0, 0.5);">WHY JOIN CSBT E-SPORTS?</h2>
+            
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 30px;">
+                <!-- Professional Tournaments -->
+                <div style="
+                    background: #111; 
+                    padding: 30px; 
+                    border-radius: 15px; 
+                    transition: all 0.3s ease;
+                    border: 2px solid #ffd700;
+                    box-shadow: 0 0 20px rgba(255, 215, 0, 0.2);
+                    transition: all 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease;"
+                    onmouseover="this.style.transform='translateY(-5px)'; 
+                                 this.style.boxShadow='0 0 30px rgba(255, 215, 0, 0.6), 0 0 50px rgba(255, 215, 0, 0.3), 0 0 70px rgba(255, 215, 0, 0.1)';
+                                 this.style.borderColor='#ffe44d';"
+                    onmouseout="this.style.transform='translateY(0)'; 
+                                this.style.boxShadow='0 0 20px rgba(255, 215, 0, 0.2)';
+                                this.style.borderColor='#ffd700';">
+                    <div style="font-size: 40px; margin-bottom: 20px; text-align: center; text-shadow: 0 0 20px rgba(255, 215, 0, 0.5);">🏆</div>
+                    <h3 style="color: #ffd700; margin-bottom: 15px; font-size: 22px; text-align: center; text-shadow: 0 0 10px rgba(255, 215, 0, 0.5);">Professional Tournaments</h3>
+                    <p style="color: #fff; line-height: 1.6; font-size: 1.1em;">Compete in well-organized tournaments with professional management and fair play environment.</p>
+                </div>
+
+                <!-- Prize Pool -->
+                <div style="
+                    background: #111; 
+                    padding: 30px; 
+                    border-radius: 15px; 
+                    transition: transform 0.3s ease;
+                    border: 2px solid #ffd700;
+                    box-shadow: 0 0 20px rgba(255, 215, 0, 0.2);
+                    transition: transform 0.3s ease, box-shadow 0.3s ease;"
+                    onmouseover="this.style.transform='translateY(-5px)'; this.style.boxShadow='0 0 30px rgba(255, 215, 0, 0.3)'"
+                    onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='0 0 20px rgba(255, 215, 0, 0.2)'">
+                    <div style="font-size: 40px; margin-bottom: 20px; text-align: center; text-shadow: 0 0 20px rgba(255, 215, 0, 0.5);">💰</div>
+                    <h3 style="color: #ffd700; margin-bottom: 15px; font-size: 22px; text-align: center; text-shadow: 0 0 10px rgba(255, 215, 0, 0.5);">Prize Pool</h3>
+                    <p style="color: #fff; line-height: 1.6; font-size: 1.1em;">Attractive prize pools and rewards for winners. Every tournament offers exciting cash prizes.</p>
+                </div>
+
+                <!-- Gaming Community -->
+                <div style="
+                    background: #111; 
+                    padding: 30px; 
+                    border-radius: 15px; 
+                    transition: transform 0.3s ease;
+                    border: 2px solid #ffd700;
+                    box-shadow: 0 0 20px rgba(255, 215, 0, 0.2);
+                    transition: all 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease;"
+                    onmouseover="this.style.transform='translateY(-5px)';
+                                 this.style.boxShadow='0 0 30px rgba(255, 215, 0, 0.6), 0 0 50px rgba(255, 215, 0, 0.3), 0 0 70px rgba(255, 215, 0, 0.1)';
+                                 this.style.borderColor='#ffe44d';"
+                    onmouseout="this.style.transform='translateY(0)';
+                                this.style.boxShadow='0 0 20px rgba(255, 215, 0, 0.2)';
+                                this.style.borderColor='#ffd700'">
+                    <div style="font-size: 40px; margin-bottom: 20px; text-align: center; text-shadow: 0 0 20px rgba(255, 215, 0, 0.5);">🎮</div>
+                    <h3 style="color: #ffd700; margin-bottom: 15px; font-size: 22px; text-align: center; text-shadow: 0 0 10px rgba(255, 215, 0, 0.5);">Gaming Community</h3>
+                    <p style="color: #fff; line-height: 1.6; font-size: 1.1em;">Join a thriving community of passionate gamers. Connect, learn, and grow together.</p>
+                </div>
+
+                <!-- Live Streaming -->
+                <div style="
+                    background: #111; 
+                    padding: 30px; 
+                    border-radius: 15px; 
+                    transition: transform 0.3s ease;
+                    border: 2px solid #ffd700;
+                    box-shadow: 0 0 20px rgba(255, 215, 0, 0.2);
+                    transition: transform 0.3s ease, box-shadow 0.3s ease;"
+                    onmouseover="this.style.transform='translateY(-5px)'; this.style.boxShadow='0 0 30px rgba(255, 215, 0, 0.3)'"
+                    onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='0 0 20px rgba(255, 215, 0, 0.2)'">
+                    <div style="font-size: 40px; margin-bottom: 20px; text-align: center;">
+                        <i class="fab fa-youtube" style="color: #ff0000; text-shadow: 0 0 20px rgba(255, 0, 0, 0.5);"></i>
+                    </div>
+                    <h3 style="color: #ffd700; margin-bottom: 15px; font-size: 22px; text-align: center; text-shadow: 0 0 10px rgba(255, 215, 0, 0.5);">Live Streaming</h3>
+                    <p style="color: #fff; line-height: 1.6; font-size: 1.1em;">All matches are professionally streamed with expert commentary on our YouTube channel.</p>
+                </div>
+
+                <!-- Fair Competition -->
+                <div style="
+                    background: #111; 
+                    padding: 30px; 
+                    border-radius: 15px; 
+                    transition: transform 0.3s ease;
+                    border: 2px solid #ffd700;
+                    box-shadow: 0 0 20px rgba(255, 215, 0, 0.2);
+                    transition: transform 0.3s ease, box-shadow 0.3s ease;"
+                    onmouseover="this.style.transform='translateY(-5px)'; this.style.boxShadow='0 0 30px rgba(255, 215, 0, 0.3)'"
+                    onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='0 0 20px rgba(255, 215, 0, 0.2)'">
+                    <div style="font-size: 40px; margin-bottom: 20px; text-align: center; text-shadow: 0 0 20px rgba(255, 215, 0, 0.5);">🎯</div>
+                    <h3 style="color: #ffd700; margin-bottom: 15px; font-size: 22px; text-align: center; text-shadow: 0 0 10px rgba(255, 215, 0, 0.5);">Fair Competition</h3>
+                    <p style="color: #fff; line-height: 1.6; font-size: 1.1em;">Strict anti-cheat measures and professional moderation ensure fair gameplay.</p>
+                </div>
+
+                <!-- Growth Opportunities -->
+                <div style="
+                    background: #111; 
+                    padding: 30px; 
+                    border-radius: 15px; 
+                    transition: transform 0.3s ease;
+                    border: 2px solid #ffd700;
+                    box-shadow: 0 0 20px rgba(255, 215, 0, 0.2);
+                    transition: transform 0.3s ease, box-shadow 0.3s ease;"
+                    onmouseover="this.style.transform='translateY(-5px)'; this.style.boxShadow='0 0 30px rgba(255, 215, 0, 0.3)'"
+                    onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='0 0 20px rgba(255, 215, 0, 0.2)'">
+                    <div style="font-size: 40px; margin-bottom: 20px; text-align: center; text-shadow: 0 0 20px rgba(255, 215, 0, 0.5);">🌟</div>
+                    <h3 style="color: #ffd700; margin-bottom: 15px; font-size: 22px; text-align: center; text-shadow: 0 0 10px rgba(255, 215, 0, 0.5);">Growth Opportunities</h3>
+                    <p style="color: #fff; line-height: 1.6; font-size: 1.1em;">Platform to showcase your skills and get noticed by professional esports teams.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- फुटर -->
+    <footer id="footer" style="padding: 60px 20px; background: #1f1633;">
+        <div style="max-width: 1200px; margin: 0 auto; display: grid; grid-template-columns: repeat(4, 1fr); gap: 40px;">
+            <!-- CSBT E-Sports Section -->
+            <div>
+                <h3 style="color: #fff; font-size: 24px; margin-bottom: 20px;">
+                    <span style="color: #ffd700;">⚡</span> CSBT E-Sports
+                </h3>
+                <p style="
+                    color: #ffd700;
+                    line-height: 1.6;
+                    padding: 10px 15px;
+                    background: rgba(255, 215, 0, 0.1);
+                    border-radius: 5px;
+                    border: 1px solid rgba(255, 215, 0, 0.3);
+                    transition: all 0.3s ease;
+                    "
+                    onmouseover="this.style.background='rgba(255, 215, 0, 0.2)'; this.style.transform='translateY(-2px)'"
+                    onmouseout="this.style.background='rgba(255, 215, 0, 0.1)'; this.style.transform='translateY(0)'">
+                    Join the ultimate gaming community and compete in professional BGMI tournaments.
+                </p>
+            </div>
+
+            <!-- Quick Links -->
+            <div style="margin-top: 8px;">
+                <h3 style="color: #ffd700; font-size: 20px; margin-bottom: 25px;">Quick Links</h3>
+                <ul style="list-style: none; padding: 0; margin: 0;">
+                    <li style="margin-bottom: 15px;">
+                        <a href="#home" 
+                           style="color: #999; 
+                                  text-decoration: none; 
+                                  transition: all 0.3s ease;
+                                  padding: 8px 15px;
+                                  border-radius: 4px;
+                                  background: rgba(255, 215, 0, 0.1);
+                                  display: inline-block;
+                                  width: 85%;"
+                           onmouseover="this.style.color='#ffd700'; this.style.background='rgba(255, 215, 0, 0.2)'"
+                           onmouseout="this.style.color='#999'; this.style.background='rgba(255, 215, 0, 0.1)'">
+                            Home
+                        </a>
+                    </li>
+                    <li style="margin-bottom: 15px;">
+                        <a href="leaderboard.html" 
+                           style="color: #999; 
+                                  text-decoration: none; 
+                                  transition: all 0.3s ease;
+                                  padding: 8px 15px;
+                                  border-radius: 4px;
+                                  background: rgba(255, 215, 0, 0.1);
+                                  display: inline-block;
+                                  width: 85%;"
+                           onmouseover="this.style.color='#ffd700'; this.style.background='rgba(255, 215, 0, 0.2)'"
+                           onmouseout="this.style.color='#999'; this.style.background='rgba(255, 215, 0, 0.1)'">
+                            Leaderboard
+                        </a>
+                    </li>
+                    <li style="margin-bottom: 15px;">
+                        <a href="about.html" 
+                           style="color: #999; 
+                                  text-decoration: none; 
+                                  transition: all 0.3s ease;
+                                  padding: 8px 15px;
+                                  border-radius: 4px;
+                                  background: rgba(255, 215, 0, 0.1);
+                                  display: inline-block;
+                                  width: 85%;"
+                           onmouseover="this.style.color='#ffd700'; this.style.background='rgba(255, 215, 0, 0.2)'"
+                           onmouseout="this.style.color='#999'; this.style.background='rgba(255, 215, 0, 0.1)'">
+                            About Us
+                        </a>
+                    </li>
+                    <li style="margin-bottom: 15px;">
+                        <a href="registration.html" 
+                           style="color: #999; 
+                                  text-decoration: none; 
+                                  transition: all 0.3s ease;
+                                  padding: 8px 15px;
+                                  border-radius: 4px;
+                                  background: rgba(255, 215, 0, 0.1);
+                                  display: inline-block;
+                                  width: 85%;"
+                           onmouseover="this.style.color='#ffd700'; this.style.background='rgba(255, 215, 0, 0.2)'"
+                           onmouseout="this.style.color='#999'; this.style.background='rgba(255, 215, 0, 0.1)'">
+                            Register
+                        </a>
+                    </li>
+                </ul>
+            </div>
+
+            <!-- Contact Us -->
+            <div id="contact-section" style="margin-top: 8px;">
+                <h3 style="color: #ffd700; font-size: 20px; margin-bottom: 25px;">Contact Us</h3>
+                <div style="display: flex; flex-direction: column; gap: 15px;">
+                    <p style="color: #999; margin: 0;">
+                        <a href="mailto:csbtesports@gmail.com" 
+                           style="color: #999; 
+                                  text-decoration: none; 
+                                  transition: all 0.3s ease;
+                                  padding: 8px 15px;
+                                  border-radius: 4px;
+                                  background: rgba(255, 215, 0, 0.1);
+                                  display: flex;
+                                  align-items: center;
+                                  width: 85%;"
+                           onmouseover="this.style.color='#ffd700'; this.style.background='rgba(255, 215, 0, 0.2)'"
+                           onmouseout="this.style.color='#999'; this.style.background='rgba(255, 215, 0, 0.1)'">
+                            <i class="far fa-envelope" style="color: #ffd700; margin-right: 10px;"></i>
+                            csbtesports@gmail.com
+                        </a>
+                    </p>
+                    <p style="color: #999; margin: 0;">
+                        <a href="https://t.me/CSBT_Esports" 
+                           target="_blank" 
+                           style="color: #999; 
+                                  text-decoration: none; 
+                                  transition: all 0.3s ease;
+                                  padding: 8px 15px;
+                                  border-radius: 4px;
+                                  background: rgba(255, 215, 0, 0.1);
+                                  display: flex;
+                                  align-items: center;
+                                  width: 85%;"
+                           onmouseover="this.style.color='#ffd700'; this.style.background='rgba(255, 215, 0, 0.2)'"
+                           onmouseout="this.style.color='#999'; this.style.background='rgba(255, 215, 0, 0.1)'">
+                            <i class="fab fa-telegram" style="color: #ffd700; margin-right: 10px;"></i>
+                            Telegram Support
+                        </a>
+                    </p>
+                    <p style="color: #999; margin: 0;">
+                        <a href="https://www.youtube.com/channel/UCpQUoGyGSPX0Vj-Qz_IBnlQ" 
+                           target="_blank" 
+                           style="color: #999; 
+                                  text-decoration: none; 
+                                  transition: all 0.3s ease;
+                                  padding: 8px 15px;
+                                  border-radius: 4px;
+                                  background: rgba(255, 215, 0, 0.1);
+                                  display: flex;
+                                  align-items: center;
+                                  width: 85%;"
+                           onmouseover="this.style.color='#ffd700'; this.style.background='rgba(255, 215, 0, 0.2)'"
+                           onmouseout="this.style.color='#999'; this.style.background='rgba(255, 215, 0, 0.1)'">
+                            <i class="fab fa-youtube" style="color: #ffd700; margin-right: 10px;"></i>
+                            YouTube Channel
+                        </a>
+                    </p>
+                    <p style="color: #999; margin: 0;">
+                        <a href="https://www.instagram.com/csbt_esports/" 
+                           target="_blank" 
+                           style="color: #999; 
+                                  text-decoration: none; 
+                                  transition: all 0.3s ease;
+                                  padding: 8px 15px;
+                                  border-radius: 4px;
+                                  background: rgba(255, 215, 0, 0.1);
+                                  display: flex;
+                                  align-items: center;
+                                  width: 85%;"
+                           onmouseover="this.style.color='#ffd700'; this.style.background='rgba(255, 215, 0, 0.2)'"
+                           onmouseout="this.style.color='#999'; this.style.background='rgba(255, 215, 0, 0.1)'">
+                            <i class="fab fa-instagram" style="color: #ffd700; margin-right: 10px;"></i>
+                            Instagram Page
+                        </a>
+                    </p>
+                </div>
+            </div>
+
+            <!-- Stay Updated -->
+            <div>
+                <h3 style="color: #ffd700; font-size: 20px; margin-bottom: 20px;">Stay Updated</h3>
+                <p style="color: #999; margin-bottom: 20px;">Subscribe to our newsletter for tournament updates.</p>
+                <div style="display: flex; gap: 10px;">
+                    <input type="email" placeholder="Enter your email" style="padding: 10px; border-radius: 5px; border: none; background: rgba(255, 255, 255, 0.1); color: #fff; flex: 1;">
+                    <button style="padding: 10px 20px; border-radius: 5px; border: none; background: #8257e6; color: #fff; cursor: pointer;">Subscribe</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Bottom Footer -->
+        <div style="text-align: center; margin-top: 40px; padding-top: 20px; border-top: 1px solid rgba(255, 255, 255, 0.1);">
+            <p style="color: #999; margin-bottom: 10px;">&copy; 2025 CSBT E-Sports. All rights reserved.</p>
+            <div>
+                <a href="#privacy" 
+                   onclick="showPrivacyPolicy()" 
+                   style="
+                        color: #ffd700;
+                        text-decoration: none;
+                        margin-right: 20px;
+                        padding: 8px 15px;
+                        background: rgba(255, 215, 0, 0.1);
+                        border-radius: 5px;
+                        border: 1px solid rgba(255, 215, 0, 0.3);
+                        transition: all 0.3s ease;
+                   "
+                   onmouseover="this.style.background='rgba(255, 215, 0, 0.2)'; this.style.transform='translateY(-2px)'"
+                   onmouseout="this.style.background='rgba(255, 215, 0, 0.1)'; this.style.transform='translateY(0)'">
+                    Privacy Policy
+                </a>
+                <a href="#terms" 
+                   onclick="showTerms()" 
+                   style="
+                        color: #ffd700;
+                        text-decoration: none;
+                        padding: 8px 15px;
+                        background: rgba(255, 215, 0, 0.1);
+                        border-radius: 5px;
+                        border: 1px solid rgba(255, 215, 0, 0.3);
+                        transition: all 0.3s ease;
+                   "
+                   onmouseover="this.style.background='rgba(255, 215, 0, 0.2)'; this.style.transform='translateY(-2px)'"
+                   onmouseout="this.style.background='rgba(255, 215, 0, 0.1)'; this.style.transform='translateY(0)'">
+                    Terms & Conditions
+                </a>
+            </div>
+
+            <!-- Privacy Policy Modal -->
+            <div id="privacyModal" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.9); z-index: 1000; overflow-y: auto;">
+                <div style="max-width: 800px; margin: 50px auto; padding: 30px; background: #111; border-radius: 15px; border: 2px solid #ffd700; color: #fff;">
+                    <h2 style="color: #ffd700; margin-bottom: 30px; text-align: center;">Privacy Policy</h2>
+                    
+                    <h3 style="color: #ffd700; margin: 20px 0 10px;">1. Introduction</h3>
+                    <p style="margin-bottom: 15px; line-height: 1.6;">We respect your privacy and are committed to protecting your personal information. This Privacy Policy explains how we collect, use, and safeguard your data when you participate in our BGMI tournament.</p>
+
+                    <h3 style="color: #ffd700; margin: 20px 0 10px;">2. Information We Collect</h3>
+                    <ul style="list-style-type: disc; margin-left: 20px; margin-bottom: 15px;">
+                        <li>Personal details such as name, email, phone number, and game ID during registration.</li>
+                        <li>Payment details for entry fee processing.</li>
+                        <li>Gameplay data such as match results and rankings.</li>
+                    </ul>
+
+                    <h3 style="color: #ffd700; margin: 20px 0 10px;">3. How We Use Your Information</h3>
+                    <ul style="list-style-type: disc; margin-left: 20px; margin-bottom: 15px;">
+                        <li>To process registrations and manage tournament participation.</li>
+                        <li>To communicate important updates regarding the tournament.</li>
+                        <li>To prevent fraud and ensure fair play.</li>
+                    </ul>
+
+                    <h3 style="color: #ffd700; margin: 20px 0 10px;">4. Data Protection</h3>
+                    <p style="margin-bottom: 15px; line-height: 1.6;">We implement security measures to protect your personal data. We do not share your information with third parties except when required by law.</p>
+
+                    <h3 style="color: #ffd700; margin: 20px 0 10px;">5. Contact Us</h3>
+                    <p style="margin-bottom: 15px; line-height: 1.6;">For any privacy-related concerns, please contact us at <a href="mailto:csbtesports@gmail.com" style="color: #ffd700;">csbtesports@gmail.com</a></p>
+
+                    <button onclick="hidePrivacyPolicy()" style="display: block; margin: 30px auto 0; padding: 10px 20px; background: #ffd700; color: #000; border: none; border-radius: 5px; cursor: pointer;">Close</button>
+                </div>
+            </div>
+
+            <!-- Terms & Conditions Modal -->
+            <div id="termsModal" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.9); z-index: 1000; overflow-y: auto;">
+                <div style="max-width: 800px; margin: 50px auto; padding: 30px; background: #111; border-radius: 15px; border: 2px solid #ffd700; color: #fff;">
+                    <h2 style="color: #ffd700; margin-bottom: 30px; text-align: center;">Terms & Conditions</h2>
+
+                    <h3 style="color: #ffd700; margin: 20px 0 10px;">1. Eligibility</h3>
+                    <ul style="list-style-type: disc; margin-left: 20px; margin-bottom: 15px;">
+                        <li>Participants must be at least <strong>16 years old</strong>.</li>
+                        <li>A valid BGMI account with a <strong>Platinum V</strong> rank or higher and <strong>level 25</strong> is required.</li>
+                    </ul>
+
+                    <h3 style="color: #ffd700; margin: 20px 0 10px;">2. Registration & Fees</h3>
+                    <ul style="list-style-type: disc; margin-left: 20px; margin-bottom: 15px;">
+                        <li>Entry fee: ₹199 per team.</li>
+                        <li>Fees are <strong>non-refundable</strong> after registration.</li>
+                        <li>Teams must register with accurate details to avoid disqualification.</li>
+                    </ul>
+
+                    <h3 style="color: #ffd700; margin: 20px 0 10px;">3. Tournament Rules</h3>
+                    <ul style="list-style-type: disc; margin-left: 20px; margin-bottom: 15px;">
+                        <li>Players must use their registered BGMI username during matches.</li>
+                        <li>Any use of hacks, cheats, or third-party software will result in immediate disqualification.</li>
+                        <li>Teaming with other squads is strictly prohibited.</li>
+                    </ul>
+
+                    <h3 style="color: #ffd700; margin: 20px 0 10px;">4. Code of Conduct</h3>
+                    <ul style="list-style-type: disc; margin-left: 20px; margin-bottom: 15px;">
+                        <li>Players must maintain respectful behavior towards opponents and organizers.</li>
+                        <li>Any form of harassment or offensive behavior will lead to penalties or disqualification.</li>
+                    </ul>
+
+                    <h3 style="color: #ffd700; margin: 20px 0 10px;">5. Disqualification & Bans</h3>
+                    <ul style="list-style-type: disc; margin-left: 20px; margin-bottom: 15px;">
+                        <li>Failure to comply with tournament rules may result in a ban from future events.</li>
+                        <li>The organizers reserve the right to make final decisions on any disputes.</li>
+                    </ul>
+
+                    <h3 style="color: #ffd700; margin: 20px 0 10px;">6. Disclaimer</h3>
+                    <ul style="list-style-type: disc; margin-left: 20px; margin-bottom: 15px;">
+                        <li>The tournament organizers are not responsible for technical issues or game crashes during matches.</li>
+                        <li>Prizes and tournament structure are subject to change at the organizer's discretion.</li>
+                    </ul>
+
+                    <p style="margin: 20px 0; line-height: 1.6;">By registering, you agree to abide by these Terms & Conditions. For any queries, contact us at <a href="mailto:csbtesports@gmail.com" style="color: #ffd700;">csbtesports@gmail.com</a></p>
+
+                    <button onclick="hideTerms()" style="display: block; margin: 30px auto 0; padding: 10px 20px; background: #ffd700; color: #000; border: none; border-radius: 5px; cursor: pointer;">Close</button>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // पेज लोड होने पर टॉप पर स्क्रॉल करें
+        window.onload = function() {
+            window.scrollTo(0, 0);
+        }
+
+        // मोबाइल मेनू टॉगल
+        const mobileMenuBtn = document.querySelector('.mobile-menu-btn');
+        const navLinks = document.querySelector('.nav-links');
+
+        mobileMenuBtn.addEventListener('click', () => {
+            navLinks.classList.toggle('active');
+        });
+
+        // नेविगेशन बार स्क्रॉल इफेक्ट
+        let ticking = false;
+        window.addEventListener('scroll', () => {
+            if (!ticking) {
+                window.requestAnimationFrame(() => {
+                    const navbar = document.querySelector('.navbar');
+                    if (window.scrollY > 50) {
+                        navbar.style.background = 'rgba(0, 0, 0, 0.9)';
+                        navbar.style.padding = '15px 0';
+                    } else {
+                        navbar.style.background = 'rgba(0, 0, 0, 0.8)';
+                        navbar.style.padding = '20px 0';
+                    }
+                    ticking = false;
+                });
+                ticking = true;
+            }
+        });
+
+        // मेनू लिंक क्लिक पर मोबाइल मेनू बंद करें
+        document.querySelectorAll('.nav-links a').forEach(link => {
+            link.addEventListener('click', () => {
+                if (window.innerWidth <= 768) {
+                    navLinks.classList.remove('active');
+                }
+            });
+        });
+
+        function scrollToFooter(event) {
+            event.preventDefault();
+            const footer = document.getElementById('footer');
+            footer.scrollIntoView({ behavior: 'smooth' });
+        }
+
+        // Lazy load images
+        document.addEventListener('DOMContentLoaded', () => {
+            const lazyImages = document.querySelectorAll('img[data-src]');
+            
+            const imageObserver = new IntersectionObserver((entries, observer) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        const img = entry.target;
+                        img.src = img.dataset.src;
+                        img.classList.add('loaded');
+                        observer.unobserve(img);
+                    }
+                });
+            });
+
+            lazyImages.forEach(img => imageObserver.observe(img));
+        });
+
+        // Debounce resize events
+        function debounce(func, wait) {
+            let timeout;
+            return function executedFunction(...args) {
+                const later = () => {
+                    clearTimeout(timeout);
+                    func(...args);
+                };
+                clearTimeout(timeout);
+                timeout = setTimeout(later, wait);
+            };
+        }
+
+        // Handle resize events efficiently
+        const handleResize = debounce(() => {
+            // Add any resize-specific logic here
+            if (window.innerWidth > 768) {
+                document.querySelector('.nav-links').classList.remove('active');
+            }
+        }, 250);
+
+        window.addEventListener('resize', handleResize);
+
+        // Touch event optimization for mobile
+        if ('ontouchstart' in window) {
+            document.addEventListener('touchstart', () => {}, {passive: true});
+        }
+
+        // वीडियो लोडिंग ऑप्टिमाइज़ेशन
+        document.addEventListener('DOMContentLoaded', function() {
+            const video = document.querySelector('.hero-video');
+            
+            // वीडियो की स्पीड को 1.75x पर सेट करें
+            video.playbackRate = 1.75;
+            
+            // मोबाइल डिवाइस चेक करें
+            const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
+            
+            if (isMobile) {
+                video.setAttribute('playbackRate', '1.75');
+                
+                video.addEventListener('loadeddata', function() {
+                    video.play().catch(function(error) {
+                        console.log("Video autoplay failed:", error);
+                    });
+                });
+            }
+            
+            // वीडियो एरर हैंडलिंग
+            video.addEventListener('error', function(e) {
+                console.log("Video error:", e);
+                document.querySelector('.hero').style.background = 'linear-gradient(to bottom, #000, #111)';
+            });
+        });
+
+        // वीडियो लोडिंग और एरर हैंडलिंग
+        document.addEventListener('DOMContentLoaded', function() {
+            const detailsVideo = document.querySelector('.details-bg-video');
+            
+            // एरर हैंडलिंग
+            detailsVideo.addEventListener('error', function(e) {
+                console.log("Details video error:", e);
+                document.querySelector('.tournament-details').style.background = 'linear-gradient(to bottom, #000, #111)';
+            });
+            
+            // मोबाइल डिवाइस चेक
+            const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
+            if (isMobile) {
+                detailsVideo.setAttribute('playbackRate', '0.5');
+            }
+        });
+
+        // WHY JOIN सेक्शन वीडियो के लिए एरर हैंडलिंग
+        document.addEventListener('DOMContentLoaded', function() {
+            const whyJoinVideo = document.querySelector('.why-join-bg-video');
+            
+            // एरर हैंडलिंग
+            whyJoinVideo.addEventListener('error', function(e) {
+                console.log("Why Join video error:", e);
+                document.querySelector('.why-join').style.background = 'linear-gradient(to bottom, #000, #111)';
+            });
+            
+            // मोबाइल डिवाइस चेक
+            const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
+            if (isMobile) {
+                whyJoinVideo.setAttribute('playbackRate', '0.5');
+            }
+        });
+
+        // Smooth scroll for anchor links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const targetId = this.getAttribute('href');
+                const targetElement = document.querySelector(targetId);
+                
+                if (targetElement) {
+                    targetElement.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                }
+            });
+        });
+
+        // Smooth scroll for navigation links
+        function scrollToSection(sectionId) {
+            const section = document.querySelector(sectionId);
+            if (section) {
+                section.scrollIntoView({
+                    behavior: 'smooth',
+                    block: 'start'
+                });
+            }
+        }
+
+        // वीडियो लेजी लोडिंग
+        document.addEventListener('DOMContentLoaded', function() {
+            const detailsVideo = document.querySelector('.details-bg-video');
+            
+            // वीडियो सोर्स सेट करें
+            detailsVideo.src = detailsVideo.dataset.src;
+            
+            // एरर हैंडलिंग
+            detailsVideo.addEventListener('error', function(e) {
+                console.log("Details video error:", e);
+                document.querySelector('.tournament-details').style.background = 'linear-gradient(to bottom, #000, #111)';
+            });
+        });
+
+        // WHY JOIN सेक्शन वीडियो लेजी लोडिंग
+        document.addEventListener('DOMContentLoaded', function() {
+            const whyJoinVideo = document.querySelector('.why-join-bg-video');
+            
+            // वीडियो सोर्स सेट करें
+            whyJoinVideo.src = whyJoinVideo.dataset.src;
+            
+            // एरर हैंडलिंग
+            whyJoinVideo.addEventListener('error', function(e) {
+                console.log("Why Join video error:", e);
+                document.querySelector('.why-join').style.background = 'linear-gradient(to bottom, #000, #111)';
+            });
+        });
+
+        // Update the countdown timer function
+        function updateCountdown() {
+            const registrationEnd = new Date('2025-07-01T00:00:00').getTime();
+            const now = new Date().getTime();
+            
+            let difference = registrationEnd - now;
+            let countdownText = "Registration Ends In:";
+            
+            if (difference <= 0) {
+                difference = 0;
+                countdownText = "Registration Closed";
+            }
+            
+            const days = Math.floor(difference / (1000 * 60 * 60 * 24));
+            const hours = Math.floor((difference % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+            const minutes = Math.floor((difference % (1000 * 60 * 60)) / (1000 * 60));
+            const seconds = Math.floor((difference % (1000 * 60)) / 1000);
+            
+            document.getElementById('days').innerHTML = days.toString().padStart(2, '0');
+            document.getElementById('hours').innerHTML = hours.toString().padStart(2, '0');
+            document.getElementById('minutes').innerHTML = minutes.toString().padStart(2, '0');
+            document.getElementById('seconds').innerHTML = seconds.toString().padStart(2, '0');
+            
+            document.querySelector('#countdown p').innerHTML = countdownText;
+            
+            if (difference <= 0) {
+                document.getElementById('days').innerHTML = '00';
+                document.getElementById('hours').innerHTML = '00';
+                document.getElementById('minutes').innerHTML = '00';
+                document.getElementById('seconds').innerHTML = '00';
+            }
+        }
+
+        // Update countdown every second
+        setInterval(updateCountdown, 1000);
+        updateCountdown(); // Initial call
+
+        // Privacy Policy और Terms & Conditions के लिए फंक्शंस
+        function showPrivacyPolicy() {
+            document.getElementById('privacyModal').style.display = 'block';
+            document.body.style.overflow = 'hidden';
+        }
+
+        function hidePrivacyPolicy() {
+            document.getElementById('privacyModal').style.display = 'none';
+            document.body.style.overflow = 'auto';
+        }
+
+        function showTerms() {
+            document.getElementById('termsModal').style.display = 'block';
+            document.body.style.overflow = 'hidden';
+        }
+
+        function hideTerms() {
+            document.getElementById('termsModal').style.display = 'none';
+            document.body.style.overflow = 'auto';
+        }
+
+        // मोडल के बाहर क्लिक करने पर बंद करें
+        window.onclick = function(event) {
+            if (event.target == document.getElementById('privacyModal')) {
+                hidePrivacyPolicy();
+            }
+            if (event.target == document.getElementById('termsModal')) {
+                hideTerms();
+            }
+        }
+
+        // Add this code to your existing script section
+        document.addEventListener('DOMContentLoaded', function() {
+            const secondBgVideo = document.getElementById('secondBgVideo');
+            
+            // स्पीड को 0.75 से घटाकर 0.6 कर दिया है
+            secondBgVideo.playbackRate = 0.6;
+            
+            // Error handling
+            secondBgVideo.addEventListener('error', function(e) {
+                console.log("Second background video error:", e);
+                secondBgVideo.parentElement.style.background = 'linear-gradient(to bottom, #000, #111)';
+            });
+            
+            // मोबाइल डिवाइस के लिए भी वही स्पीड सेट करें
+            const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
+            if (isMobile) {
+                secondBgVideo.setAttribute('playbackRate', '0.6');
+            }
+        });
+
+        document.addEventListener('DOMContentLoaded', function() {
+            // हीरो वीडियो की स्पीड सेट करें
+            const heroVideo = document.getElementById('heroVideo');
+            heroVideo.playbackRate = 0.9; // स्पीड को 0.75 से बढ़ाकर 0.9 किया
+            
+            // बाकी सभी वीडियोज़ की स्पीड सेट करें
+            const sectionVideos = document.querySelectorAll('#sectionVideo');
+            sectionVideos.forEach(video => {
+                video.playbackRate = 0.9; // स्पीड को 0.75 से बढ़ाकर 0.9 किया
+            });
+            
+            // मोबाइल डिवाइस के लिए भी वही स्पीड सेट करें
+            const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
+            if (isMobile) {
+                heroVideo.setAttribute('playbackRate', '0.9');
+                sectionVideos.forEach(video => {
+                    video.setAttribute('playbackRate', '0.9');
+                });
+            }
+        });
+    </script>
+
+    <!-- Chat Bot Widget -->
+    <div id="chat-widget" style="
+        position: fixed;
+        bottom: 20px;
+        right: 20px;
+        z-index: 1000;
+    ">
+        <!-- Chat Button -->
+        <button onclick="toggleChat()" id="chat-button" style="
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            background: linear-gradient(45deg, #ffd700, #ff9900);
+            border: none;
+            cursor: pointer;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.4);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s ease;
+        ">
+            <i class="fas fa-comments" style="font-size: 24px; color: #000;"></i>
+        </button>
+
+        <!-- Chat Window -->
+        <div id="chat-window" style="
+            display: none;
+            position: absolute;
+            bottom: 80px;
+            right: 0;
+            width: 300px;
+            height: 400px;
+            background: #111;
+            border-radius: 15px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.5);
+            border: 2px solid #ffd700;
+            overflow: hidden;
+        ">
+            <!-- Chat Header -->
+            <div style="
+                padding: 15px;
+                background: linear-gradient(45deg, #ffd700, #ff9900);
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+            ">
+                <h3 style="margin: 0; color: #000;">CSBT Support</h3>
+                <button onclick="toggleChat()" style="
+                    background: none;
+                    border: none;
+                    color: #000;
+                    cursor: pointer;
+                    font-size: 18px;
+                ">×</button>
+            </div>
+
+            <!-- Chat Messages -->
+            <div id="chat-messages" style="
+                height: 300px;
+                overflow-y: auto;
+                padding: 15px;
+            ">
+                <div style="
+                    background: rgba(255, 215, 0, 0.1);
+                    padding: 10px;
+                    border-radius: 10px;
+                    margin-bottom: 10px;
+                ">
+                    <p style="margin: 0; color: #fff;">👋 Hello! How can we help you today?</p>
+                    <div style="
+                        margin-top: 10px;
+                        padding: 10px;
+                        background: rgba(255, 215, 0, 0.15);
+                        border-radius: 8px;
+                    ">
+                        <p style="margin: 0 0 8px 0; color: #fff;">For quick support, chat with us on Telegram.</p>
+                        <a href="https://t.me/CSBT_Esports" 
+                           target="_blank" 
+                           style="
+                            display: flex;
+                            align-items: center;
+                            gap: 8px;
+                            padding: 8px 12px;
+                            background: linear-gradient(45deg, #0088cc, #00a0e3);
+                            border-radius: 5px;
+                            text-decoration: none;
+                            color: #fff;
+                            font-weight: bold;
+                            transition: all 0.3s ease;
+                        ">
+                            <i class="fab fa-telegram" style="font-size: 20px;"></i>
+                            Join CSBT Telegram
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Chat Input -->
+            <div style="
+                padding: 15px;
+                border-top: 1px solid rgba(255, 215, 0, 0.2);
+                display: flex;
+                gap: 10px;
+            ">
+                <input type="text" id="chat-input" placeholder="Type your message..." style="
+                    flex: 1;
+                    padding: 8px;
+                    border-radius: 5px;
+                    border: 1px solid #ffd700;
+                    background: #222;
+                    color: #fff;
+                ">
+                <button onclick="sendMessage()" style="
+                    padding: 8px 15px;
+                    background: linear-gradient(45deg, #ffd700, #ff9900);
+                    border: none;
+                    border-radius: 5px;
+                    color: #000;
+                    cursor: pointer;
+                ">Send</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // ... existing script ...
+
+        // Chat Bot Functions
+        function toggleChat() {
+            const chatWindow = document.getElementById('chat-window');
+            chatWindow.style.display = chatWindow.style.display === 'none' ? 'block' : 'none';
+        }
+
+        function sendMessage() {
+            const input = document.getElementById('chat-input');
+            const message = input.value.trim();
+            
+            if (message) {
+                const messagesContainer = document.getElementById('chat-messages');
+                
+                // Add user message
+                const userMessage = document.createElement('div');
+                userMessage.style.cssText = `
+                    background: rgba(255, 215, 0, 0.2);
+                    padding: 10px;
+                    border-radius: 10px;
+                    margin-bottom: 10px;
+                    margin-left: 20%;
+                    text-align: right;
+                `;
+                userMessage.innerHTML = `<p style="margin: 0; color: #fff;">${message}</p>`;
+                messagesContainer.appendChild(userMessage);
+
+                // Add bot response
+                setTimeout(() => {
+                    const botMessage = document.createElement('div');
+                    botMessage.style.cssText = `
+                        background: rgba(255, 215, 0, 0.1);
+                        padding: 10px;
+                        border-radius: 10px;
+                        margin-bottom: 10px;
+                        margin-right: 20%;
+                    `;
+                    botMessage.innerHTML = `<p style="margin: 0; color: #fff;">Thanks for your message! Our team will get back to you soon.</p>`;
+                    messagesContainer.appendChild(botMessage);
+                    
+                    // Auto scroll to bottom
+                    messagesContainer.scrollTop = messagesContainer.scrollHeight;
+                }, 1000);
+
+                // Clear input
+                input.value = '';
+                
+                // Auto scroll to bottom
+                messagesContainer.scrollTop = messagesContainer.scrollHeight;
+            }
+        }
+
+        // Allow sending message with Enter key
+        document.getElementById('chat-input').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                sendMessage();
+            }
+        });
+    </script>
+
+    <!-- बॉडी टैग के तुरंत बाद जोड़ें -->
+    <div class="animated-bg"></div>
+    <div class="bg-overlay"></div>
+</body>
+</html> 
