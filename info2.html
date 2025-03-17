@@ -1,0 +1,384 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CSBT E-Sports Tournament</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <style>
+        /* Same basic styles as info1.html */
+        body {
+            margin: 0;
+            font-family: 'Arial', sans-serif;
+            background: #000;
+            color: #fff;
+            line-height: 1.6;
+        }
+
+        .navbar {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            padding: 20px 0;
+            background: rgba(0, 0, 0, 0.8);
+            z-index: 1000;
+        }
+
+        .nav-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 20px;
+        }
+
+        .logo {
+            color: #ffd700;
+            font-size: 24px;
+            font-weight: bold;
+            text-decoration: none;
+        }
+
+        .content-container {
+            max-width: 1000px;
+            margin: 100px auto 50px;
+            padding: 20px;
+            background: rgba(17, 17, 17, 0.9);
+            border-radius: 15px;
+            border: 2px solid #ffd700;
+            box-shadow: 0 0 30px rgba(255, 215, 0, 0.2);
+        }
+
+        h1 {
+            color: #ffd700;
+            text-align: center;
+            font-size: 2.5em;
+            margin-bottom: 40px;
+            text-shadow: 0 0 20px rgba(255, 215, 0, 0.3);
+        }
+
+        h2 {
+            color: #ffd700;
+            font-size: 1.8em;
+            margin-top: 40px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid rgba(255, 215, 0, 0.3);
+        }
+
+        .rule-section {
+            background: rgba(255, 215, 0, 0.05);
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 10px;
+            border: 1px solid rgba(255, 215, 0, 0.2);
+        }
+
+        /* Navigation buttons */
+        .nav-buttons {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 40px;
+        }
+
+        .nav-button {
+            display: inline-flex;
+            align-items: center;
+            padding: 12px 25px;
+            background: linear-gradient(45deg, #ffd700, #ff9900);
+            color: #000;
+            text-decoration: none;
+            border-radius: 25px;
+            font-weight: bold;
+            transition: all 0.3s ease;
+            border: none;
+            cursor: pointer;
+            font-size: 1.1em;
+            box-shadow: 0 4px 15px rgba(255, 215, 0, 0.3);
+        }
+
+        .nav-button:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 6px 20px rgba(255, 215, 0, 0.4);
+        }
+
+        .nav-button i {
+            font-size: 1.2em;
+        }
+
+        .nav-button.prev i {
+            margin-right: 10px;
+        }
+
+        .nav-button.next i {
+            margin-left: 10px;
+        }
+
+        /* Mobile optimization */
+        @media (max-width: 768px) {
+            .content-container {
+                margin: 70px 12px 20px;
+                padding: 12px;
+            }
+
+            h1 { 
+                font-size: 1.8em; 
+                margin-bottom: 25px;
+            }
+            
+            h2 { 
+                font-size: 1.3em;
+                margin-bottom: 15px !important;
+            }
+
+            .rule-section {
+                padding: 15px;
+                margin: 15px 0;
+            }
+
+            .nav-buttons {
+                flex-direction: column;
+                gap: 12px;
+                margin-top: 25px;
+                padding: 0 10px;
+            }
+
+            .nav-button {
+                width: auto;
+                justify-content: center;
+                padding: 10px 20px;
+                font-size: 1em;
+                white-space: nowrap;
+                max-width: 100%;
+                box-sizing: border-box;
+            }
+
+            .nav-button.next {
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                text-align: center;
+                margin: 0 auto;
+                width: 90%;
+            }
+
+            /* Process of Registration mobile styles */
+            .rule-section ol {
+                padding-left: 15px;
+            }
+
+            .rule-section ol li {
+                font-size: 0.95em !important;
+                margin-bottom: 12px !important;
+                line-height: 1.4;
+            }
+
+            /* Mandatory Requirements mobile styles */
+            .rule-section ul {
+                padding-left: 5px;
+            }
+
+            .rule-section ul li {
+                font-size: 0.95em !important;
+                margin-bottom: 12px !important;
+                line-height: 1.4;
+            }
+
+            .rule-section ul li span {
+                margin-right: 8px;
+            }
+        }
+
+        /* Even smaller screens */
+        @media (max-width: 480px) {
+            .content-container {
+                margin: 65px 10px 15px;
+                padding: 10px;
+            }
+
+            h1 { 
+                font-size: 1.6em; 
+                margin-bottom: 20px;
+            }
+
+            h2 { 
+                font-size: 1.2em;
+                margin-bottom: 12px !important;
+            }
+
+            .rule-section {
+                padding: 12px;
+                margin: 12px 0;
+            }
+
+            .rule-section ol li,
+            .rule-section ul li {
+                font-size: 0.9em !important;
+                margin-bottom: 10px !important;
+            }
+
+            .nav-button {
+                padding: 8px 16px;
+                font-size: 0.95em;
+            }
+
+            .nav-button.next {
+                width: 95%;
+                font-size: 0.9em;
+            }
+
+            .nav-button i {
+                font-size: 1em;
+            }
+        }
+
+        /* एनिमेटेड बैकग्राउंड के लिए स्टाइल्स */
+        .animated-bg {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -2;
+            background: linear-gradient(
+                45deg,
+                #000000,
+                #ff1a75,  /* ब्राइटर पिंक */
+                #00ff99,  /* ब्राइटर ग्रीन */
+                #ff8080,  /* ब्राइटर रेड */
+                #668cff,  /* ब्राइटर ब्लू */
+                #ffaa00,  /* ब्राइटर ऑरेंज */
+                #b366ff,  /* ब्राइटर पर्पल */
+                #33ffff,  /* ब्राइटर साइयन */
+                #000000
+            );
+            background-size: 400% 400%;
+            animation: gradientBG 10s ease infinite;
+            opacity: 0.7;
+        }
+
+        .bg-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            background: rgba(0, 0, 0, 0.15);
+        }
+
+        @keyframes gradientBG {
+            0% {
+                background-position: 0% 50%;
+            }
+            50% {
+                background-position: 100% 50%;
+            }
+            100% {
+                background-position: 0% 50%;
+            }
+        }
+
+        @keyframes bounce {
+            0%, 20%, 50%, 80%, 100% {
+                transform: translateY(0);
+            }
+            40% {
+                transform: translateY(-20px);
+            }
+            60% {
+                transform: translateY(-10px);
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="animated-bg"></div>
+    <div class="bg-overlay"></div>
+    
+    <nav class="navbar">
+        <div class="nav-content">
+            <a href="index.html" class="logo">CSBT E-Sports</a>
+        </div>
+    </nav>
+
+    <div class="content-container">
+        <!-- Scroll Down Message -->
+        <div style="
+            text-align: center; 
+            margin-bottom: 30px;
+            padding: 15px;
+            background: rgba(255, 215, 0, 0.1);
+            border-radius: 15px;
+            border: 2px solid rgba(255, 215, 0, 0.3);
+            box-shadow: 0 0 20px rgba(255, 215, 0, 0.2);
+        ">
+            <p style="
+                color: #ffd700; 
+                font-size: 1.2em; 
+                margin-bottom: 12px;
+                text-transform: uppercase;
+                letter-spacing: 1px;
+                font-weight: bold;
+                text-shadow: 0 0 10px rgba(255, 215, 0, 0.5);
+            ">Scroll down to continue to registration</p>
+            <div style="animation: bounce 2s infinite;">
+                <i class="fas fa-chevron-down" style="
+                    color: #ffd700; 
+                    font-size: 1.8em;
+                    text-shadow: 0 0 15px rgba(255, 215, 0, 0.7);
+                "></i>
+            </div>
+        </div>
+
+        <h1>Registration Process</h1>
+        
+        <!-- Registration Process Section -->
+        <div class="rule-section">
+            <h2 style="color: #ffd700; margin-bottom: 25px;">PROCESS OF REGISTRATION</h2>
+            <ol style="list-style-type: decimal; padding-left: 20px;">
+                <li style="color: #fff; margin-bottom: 15px; font-size: 1.1em;">Enter your basic details in the Team Registration section with accurate information.</li>
+                <li style="color: #fff; margin-bottom: 15px; font-size: 1.1em;">Tick the checkbox to agree to the terms.</li>
+                <li style="color: #fff; margin-bottom: 15px; font-size: 1.1em;">Click the "Continue to Payment" button.</li>
+                <li style="color: #fff; margin-bottom: 15px; font-size: 1.1em;">Enter your correct email ID or mobile number.</li>
+                <li style="color: #fff; margin-bottom: 15px; font-size: 1.1em;">Pay the amount using PhonePe, Paytm, or Google Pay.</li>
+                <li style="color: #fff; margin-bottom: 15px; font-size: 1.1em;">Once the payment is completed, you will receive an invoice in your email.</li>
+                <li style="color: #fff; margin-bottom: 15px; font-size: 1.1em;">Click the "Back" button to be redirected to the Telegram channel for more information.</li>
+            </ol>
+        </div>
+
+        <!-- Mandatory Requirements Section -->
+        <div class="rule-section" style="margin-top: 40px;">
+            <h2 style="color: #ffd700; margin-bottom: 25px;">MANDATORY REQUIREMENTS</h2>
+            <ul style="list-style: none; padding-left: 10px;">
+                <li style="color: #fff; margin-bottom: 15px; font-size: 1.1em;">
+                    <span style="color: #ffd700; margin-right: 10px;">✔</span> Telegram account
+                </li>
+                <li style="color: #fff; margin-bottom: 15px; font-size: 1.1em;">
+                    <span style="color: #ffd700; margin-right: 10px;">✔</span> Email ID
+                </li>
+                <li style="color: #fff; margin-bottom: 15px; font-size: 1.1em;">
+                    <span style="color: #ffd700; margin-right: 10px;">✔</span> Mobile number
+                </li>
+                <li style="color: #fff; margin-bottom: 15px; font-size: 1.1em;">
+                    <span style="color: #ffd700; margin-right: 10px;">✔</span> Squad name
+                </li>
+                <li style="color: #fff; margin-bottom: 15px; font-size: 1.1em;">
+                    <span style="color: #ffd700; margin-right: 10px;">✔</span> Details of 5 team members (related to the game)
+                </li>
+                <li style="color: #fff; margin-bottom: 15px; font-size: 1.1em;">
+                    <span style="color: #ffd700; margin-right: 10px;">✔</span> After completing the payment, joining the Telegram channel is complimentary.
+                </li>
+            </ul>
+        </div>
+
+        <!-- Navigation buttons -->
+        <div class="nav-buttons" style="justify-content: center;">
+            <a href="Registration.html" class="nav-button next">
+                Team Registration
+                <i class="fas fa-arrow-right"></i>
+            </a>
+        </div>
+    </div>
+</body>
+</html> 
