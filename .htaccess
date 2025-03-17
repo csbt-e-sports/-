@@ -1,7 +1,0 @@
-# एडमिन डायरेक्टरी को प्रोटेक्ट करें
-<Directory "/admin">
-    AuthType Basic
-    AuthName "Restricted Access"
-    AuthUserFile /path/to/.htpasswd
-    Require valid-user
-</Directory> 
