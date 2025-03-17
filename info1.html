@@ -1,0 +1,563 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Player Conduct & Fair Play Rules - CSBT E-Sports</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <style>
+        body {
+            margin: 0;
+            font-family: 'Arial', sans-serif;
+            background: #000;
+            color: #fff;
+            line-height: 1.6;
+        }
+
+        .navbar {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            padding: 20px 0;
+            background: rgba(0, 0, 0, 0.8);
+            z-index: 1000;
+        }
+
+        .nav-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 20px;
+        }
+
+        .logo {
+            color: #ffd700;
+            font-size: 24px;
+            font-weight: bold;
+            text-decoration: none;
+        }
+
+        .content-container {
+            max-width: 1000px;
+            margin: 100px auto 50px;
+            padding: 20px;
+            background: rgba(17, 17, 17, 0.9);
+            border-radius: 15px;
+            border: 2px solid #ffd700;
+            box-shadow: 0 0 30px rgba(255, 215, 0, 0.2);
+        }
+
+        h1 {
+            color: #ffd700;
+            text-align: center;
+            font-size: 2.5em;
+            margin-bottom: 40px;
+            text-shadow: 0 0 20px rgba(255, 215, 0, 0.3);
+        }
+
+        h2 {
+            color: #ffd700;
+            font-size: 1.8em;
+            margin-top: 40px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid rgba(255, 215, 0, 0.3);
+        }
+
+        .rule-section {
+            background: rgba(255, 215, 0, 0.05);
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 10px;
+            border: 1px solid rgba(255, 215, 0, 0.2);
+        }
+
+        .rule-item {
+            margin: 15px 0;
+            padding-left: 25px;
+            position: relative;
+        }
+
+        .rule-item::before {
+            content: '•';
+            color: #ffd700;
+            position: absolute;
+            left: 5px;
+        }
+
+        .penalty-level {
+            display: inline-block;
+            padding: 8px 15px;
+            border-radius: 5px;
+            margin: 5px 0;
+            font-weight: bold;
+        }
+
+        .level-1 { background: rgba(255, 0, 0, 0.2); border: 1px solid #ff0000; }
+        .level-2 { background: rgba(255, 165, 0, 0.2); border: 1px solid #ffa500; }
+        .level-3 { background: rgba(255, 255, 0, 0.2); border: 1px solid #ffff00; }
+        .level-4 { background: rgba(0, 0, 255, 0.2); border: 1px solid #0000ff; }
+
+        .emoji-icon {
+            font-size: 1.2em;
+            margin-right: 10px;
+        }
+
+        @media (max-width: 768px) {
+            .content-container {
+                margin: 80px 15px 30px;
+                padding: 12px;
+            }
+
+            h1 { 
+                font-size: 1.8em;
+                margin-bottom: 25px;
+            }
+            
+            h2 { 
+                font-size: 1.4em;
+                margin-top: 25px;
+            }
+            
+            .rule-section {
+                padding: 12px;
+                margin: 15px 0;
+            }
+            
+            .rule-item {
+                margin: 10px 0;
+                padding-left: 20px;
+            }
+            
+            .rule-item ul {
+                padding-left: 15px;
+                margin: 5px 0;
+            }
+            
+            .rule-item li {
+                font-size: 0.9em;
+                margin: 5px 0;
+            }
+            
+            .penalty-level {
+                padding: 6px 12px;
+                margin: 4px 0;
+                font-size: 0.9em;
+            }
+            
+            .emoji-icon {
+                font-size: 1em;
+                margin-right: 8px;
+            }
+            
+            p {
+                font-size: 0.95em;
+                margin: 10px 0;
+            }
+        }
+
+        /* Even smaller screens */
+        @media (max-width: 480px) {
+            .content-container {
+                margin: 70px 10px 20px;
+                padding: 10px;
+            }
+            
+            h1 {
+                font-size: 1.6em;
+                margin-bottom: 20px;
+            }
+            
+            h2 {
+                font-size: 1.3em;
+                margin-top: 20px;
+            }
+            
+            .rule-section {
+                padding: 10px;
+                margin: 12px 0;
+            }
+            
+            .rule-item {
+                margin: 8px 0;
+            }
+            
+            .rule-item li {
+                font-size: 0.85em;
+            }
+            
+            .penalty-level {
+                padding: 5px 10px;
+                font-size: 0.85em;
+                display: block;
+                margin: 8px 0;
+            }
+            
+            p {
+                font-size: 0.9em;
+            }
+        }
+
+        /* Optimize navbar for mobile */
+        @media (max-width: 768px) {
+            .navbar {
+                padding: 12px 0;
+            }
+            
+            .nav-content {
+                padding: 0 15px;
+            }
+            
+            .logo {
+                font-size: 20px;
+            }
+        }
+
+        .animated-bg {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -2;
+            background: linear-gradient(
+                45deg,
+                #000000,
+                #ff1a75,  /* ब्राइटर पिंक */
+                #00ff99,  /* ब्राइटर ग्रीन */
+                #ff8080,  /* ब्राइटर रेड */
+                #668cff,  /* ब्राइटर ब्लू */
+                #ffaa00,  /* ब्राइटर ऑरेंज */
+                #b366ff,  /* ब्राइटर पर्पल */
+                #33ffff,  /* ब्राइटर साइयन */
+                #000000
+            );
+            background-size: 400% 400%;
+            animation: gradientBG 10s ease infinite;
+            opacity: 0.7;
+        }
+
+        .bg-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            background: rgba(0, 0, 0, 0.15);
+        }
+
+        /* Down Arrow Button Styles */
+        .scroll-down {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background: linear-gradient(45deg, #ffd700, #ff9900);
+            width: 45px;
+            height: 45px;
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            cursor: pointer;
+            box-shadow: 0 2px 10px rgba(255, 215, 0, 0.3);
+            z-index: 1000;
+            border: none;
+            transition: all 0.3s ease;
+            opacity: 0;
+            visibility: hidden;
+        }
+
+        .scroll-down.visible {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .scroll-down:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 4px 15px rgba(255, 215, 0, 0.4);
+        }
+
+        .scroll-down i {
+            color: #000;
+            font-size: 20px;
+        }
+
+        /* Mobile optimization for scroll button */
+        @media (max-width: 768px) {
+            .scroll-down {
+                width: 40px;
+                height: 40px;
+                bottom: 15px;
+                right: 15px;
+            }
+
+            .scroll-down i {
+                font-size: 18px;
+            }
+        }
+
+        /* Next Button Styles */
+        .next-button-container {
+            text-align: center;
+            margin: 40px 0 20px;
+        }
+
+        .next-button {
+            display: inline-flex;
+            align-items: center;
+            padding: 12px 25px;
+            background: linear-gradient(45deg, #ffd700, #ff9900);
+            color: #000;
+            text-decoration: none;
+            border-radius: 25px;
+            font-weight: bold;
+            transition: all 0.3s ease;
+            border: none;
+            cursor: pointer;
+            font-size: 1.1em;
+            box-shadow: 0 4px 15px rgba(255, 215, 0, 0.3);
+        }
+
+        .next-button:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 6px 20px rgba(255, 215, 0, 0.4);
+        }
+
+        .next-button i {
+            margin-left: 10px;
+            font-size: 1.2em;
+        }
+
+        /* Mobile optimization for next button */
+        @media (max-width: 768px) {
+            .next-button-container {
+                margin: 30px 0 15px;
+            }
+
+            .next-button {
+                padding: 10px 20px;
+                font-size: 1em;
+                width: 80%;
+                justify-content: center;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .next-button {
+                width: 90%;
+                padding: 12px 15px;
+            }
+        }
+
+        @keyframes gradientBG {
+            0% {
+                background-position: 0% 50%;
+            }
+            50% {
+                background-position: 100% 50%;
+            }
+            100% {
+                background-position: 0% 50%;
+            }
+        }
+
+        @keyframes bounce {
+            0%, 20%, 50%, 80%, 100% {
+                transform: translateY(0);
+            }
+            40% {
+                transform: translateY(-20px);
+            }
+            60% {
+                transform: translateY(-10px);
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="animated-bg"></div>
+    <div class="bg-overlay"></div>
+    
+    <!-- Down Arrow Button -->
+    <button class="scroll-down" id="scrollDown" aria-label="Scroll down">
+        <i class="fas fa-chevron-down"></i>
+    </button>
+
+    <nav class="navbar">
+        <div class="nav-content">
+            <a href="index.html" class="logo">CSBT E-Sports</a>
+        </div>
+    </nav>
+
+    <div class="content-container">
+        <!-- Scroll Down Message -->
+        <div style="
+            text-align: center; 
+            margin-bottom: 30px;
+            padding: 15px;
+            background: rgba(255, 215, 0, 0.1);
+            border-radius: 15px;
+            border: 2px solid rgba(255, 215, 0, 0.3);
+            box-shadow: 0 0 20px rgba(255, 215, 0, 0.2);
+        ">
+            <p style="
+                color: #ffd700; 
+                font-size: 1.2em; 
+                margin-bottom: 12px;
+                text-transform: uppercase;
+                letter-spacing: 1px;
+                font-weight: bold;
+                text-shadow: 0 0 10px rgba(255, 215, 0, 0.5);
+            ">Scroll down to continue to registration</p>
+            <div style="animation: bounce 2s infinite;">
+                <i class="fas fa-chevron-down" style="
+                    color: #ffd700; 
+                    font-size: 1.8em;
+                    text-shadow: 0 0 15px rgba(255, 215, 0, 0.7);
+                "></i>
+            </div>
+        </div>
+
+        <h1>Tournament Rules</h1>
+        
+        <p>To maintain a fair and competitive environment, all players must follow these conduct rules. Violations may lead to penalties, disqualification, or bans from future events.</p>
+
+        <h2>1. GENERAL CONDUCT</h2>
+        <div class="rule-section">
+            <div class="rule-item">
+                <strong><span class="emoji-icon">✅</span>Respect All Players & Officials:</strong>
+                <ul>
+                    <li>No toxic behavior, hate speech, racism, sexism, or offensive language.</li>
+                    <li>Any form of harassment, bullying, or threats will result in severe penalties.</li>
+                </ul>
+            </div>
+
+            <div class="rule-item">
+                <strong><span class="emoji-icon">✅</span>Follow Tournament Rules & Admin Instructions:</strong>
+                <ul>
+                    <li>Players must follow all official tournament rules and comply with admin decisions.</li>
+                    <li>Disrespecting officials or arguing over decisions can lead to penalties.</li>
+                </ul>
+            </div>
+
+            <div class="rule-item">
+                <strong><span class="emoji-icon">✅</span>Use Only Official PUBG Accounts:</strong>
+                <ul>
+                    <li>No guest accounts or shared accounts allowed.</li>
+                    <li>Players must use their own verified PUBG accounts registered for the tournament.</li>
+                </ul>
+            </div>
+
+            <div class="rule-item">
+                <strong><span class="emoji-icon">✅</span>Professionalism & Sportsmanship:</strong>
+                <ul>
+                    <li>Players should play fairly and with integrity at all times.</li>
+                    <li>No unsportsmanlike conduct, such as spamming, excessive taunting, or delaying the game intentionally.</li>
+                </ul>
+            </div>
+        </div>
+
+        <h2>2. PROHIBITED ACTIONS</h2>
+        <div class="rule-section">
+            <div class="rule-item">
+                <strong><span class="emoji-icon">🚫</span>Hacking & Cheating:</strong>
+                <ul>
+                    <li>Any use of hacks, aimbots, wallhacks, or any third-party software will result in an instant ban.</li>
+                    <li>Any player found cheating will be reported to PUBG officials for further action.</li>
+                </ul>
+            </div>
+
+            <div class="rule-item">
+                <strong><span class="emoji-icon">🚫</span>Teaming & Collusion:</strong>
+                <ul>
+                    <li>Players from different teams cannot work together in any way.</li>
+                    <li>Intentional feeding, assisting, or making unfair agreements is prohibited.</li>
+                </ul>
+            </div>
+
+            <div class="rule-item">
+                <strong><span class="emoji-icon">🚫</span>Stream Sniping:</strong>
+                <ul>
+                    <li>Watching live streams to gain information on opponents is strictly forbidden.</li>
+                    <li>Players must not have tournament streams open during matches.</li>
+                </ul>
+            </div>
+
+            <div class="rule-item">
+                <strong><span class="emoji-icon">🚫</span>Bug/Glitch Abuse:</strong>
+                <ul>
+                    <li>Exploiting game bugs, such as going under the map, walking through walls, or infinite healing, is strictly prohibited.</li>
+                    <li>Players must report any discovered bug to the admin team immediately.</li>
+                </ul>
+            </div>
+        </div>
+
+        <h2>3. PENALTIES & PUNISHMENTS</h2>
+        <div class="rule-section">
+            <p>Any violations will be reviewed by tournament officials. The severity of the penalty will depend on the offense.</p>
+            
+            <div class="penalty-level level-1">
+                <span class="emoji-icon">🔴</span>First Offense: Warning or minor point deduction
+            </div>
+            <div class="penalty-level level-2">
+                <span class="emoji-icon">🟠</span>Second Offense: Match disqualification (team forfeits that round)
+            </div>
+            <div class="penalty-level level-3">
+                <span class="emoji-icon">🟡</span>Third Offense: Tournament ban (player or team may be banned from future events)
+            </div>
+            <div class="penalty-level level-4">
+                <span class="emoji-icon">🔵</span>Severe Violations (Cheating, Hacking, Extreme Toxicity): Permanent ban from all events
+            </div>
+        </div>
+
+        <h2>4. REPORTING VIOLATIONS</h2>
+        <div class="rule-section">
+            <ul>
+                <li>Players can report rule-breaking with video/screenshot proof to tournament admins.</li>
+                <li>Admins will review reports before taking action.</li>
+                <li>False reporting or abusing the reporting system may also lead to penalties.</li>
+            </ul>
+        </div>
+
+        <!-- Next Button -->
+        <div class="next-button-container">
+            <a href="info2.html" class="next-button">
+                Next Section
+                <i class="fas fa-arrow-right"></i>
+            </a>
+        </div>
+    </div>
+
+    <script>
+        // Scroll Down Button Functionality
+        const scrollDownBtn = document.getElementById('scrollDown');
+        
+        // Show/hide button based on scroll position
+        window.addEventListener('scroll', () => {
+            if (window.pageYOffset > 300) {
+                scrollDownBtn.classList.add('visible');
+            } else {
+                scrollDownBtn.classList.remove('visible');
+            }
+            
+            // Hide button when near bottom of page
+            if ((window.innerHeight + window.pageYOffset) >= document.body.offsetHeight - 100) {
+                scrollDownBtn.classList.remove('visible');
+            }
+        });
+        
+        // Smooth scroll functionality
+        scrollDownBtn.addEventListener('click', () => {
+            const currentPosition = window.pageYOffset;
+            const targetPosition = currentPosition + window.innerHeight;
+            
+            window.scrollTo({
+                top: targetPosition,
+                behavior: 'smooth'
+            });
+        });
+    </script>
+</body>
+</html> 
