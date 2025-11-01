@@ -1,0 +1,1020 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CSBT E-Sports Admin Panel</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Arial', sans-serif;
+            background: #0a0a0a;
+            color: #fff;
+        }
+
+        /* Login Section */
+        .login-section {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            background: linear-gradient(45deg, #000, #111);
+        }
+
+        .login-container {
+            background: rgba(255, 255, 255, 0.05);
+            padding: 40px;
+            border-radius: 15px;
+            box-shadow: 0 0 30px rgba(255, 215, 0, 0.2);
+            border: 2px solid #ffd700;
+            width: 100%;
+            max-width: 400px;
+        }
+
+        .login-header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .login-header h1 {
+            color: #ffd700;
+            font-size: 2em;
+            margin-bottom: 10px;
+            text-shadow: 0 0 10px rgba(255, 215, 0, 0.3);
+        }
+
+        .login-form input {
+            width: 100%;
+            padding: 12px;
+            margin-bottom: 20px;
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid #ffd700;
+            border-radius: 5px;
+            color: #fff;
+            font-size: 16px;
+        }
+
+        .login-form input:focus {
+            outline: none;
+            box-shadow: 0 0 10px rgba(255, 215, 0, 0.3);
+        }
+
+        .login-btn {
+            width: 100%;
+            padding: 12px;
+            background: linear-gradient(45deg, #ffd700, #ff9900);
+            border: none;
+            border-radius: 5px;
+            color: #000;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .login-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(255, 215, 0, 0.3);
+        }
+
+        /* Admin Panel */
+        .admin-panel {
+            display: none;
+            padding: 20px;
+        }
+
+        .admin-header {
+            background: linear-gradient(45deg, #111, #000);
+            padding: 20px 40px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+        }
+
+        .admin-title {
+            color: #ffd700;
+            font-size: 24px;
+        }
+
+        .logout-btn {
+            background: linear-gradient(45deg, #ff9800, #f57c00);
+            color: white;
+            padding: 10px 25px;
+            border-radius: 25px;
+            border: none;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .logout-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(255, 152, 0, 0.3);
+        }
+
+        /* एडमिन पैनल */
+        .admin-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 25px;
+            padding: 25px;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .admin-card {
+            background: linear-gradient(145deg, #1a1a1a, #0d0d0d);
+            border: 1px solid rgba(255, 215, 0, 0.1);
+            border-radius: 15px;
+            padding: 25px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .admin-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 12px 40px rgba(255, 215, 0, 0.1);
+        }
+
+        .admin-card h3 {
+            color: #ffd700;
+            font-size: 1.5em;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .admin-card h3 i {
+            font-size: 1.2em;
+        }
+
+        .admin-table {
+            width: 100%;
+            border-collapse: separate;
+            border-spacing: 0 8px;
+            margin-top: 15px;
+        }
+
+        .admin-table th {
+            background: rgba(255, 215, 0, 0.1);
+            color: #ffd700;
+            padding: 15px;
+            text-align: left;
+            font-weight: 600;
+            border-radius: 8px;
+        }
+
+        .admin-table td {
+            background: rgba(255, 255, 255, 0.03);
+            padding: 15px;
+            transition: background 0.3s ease;
+        }
+
+        .admin-table tr:hover td {
+            background: rgba(255, 215, 0, 0.05);
+        }
+
+        .action-btn {
+            padding: 8px 15px;
+            border-radius: 8px;
+            border: none;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+
+        .edit-btn {
+            background: linear-gradient(45deg, #4CAF50, #45a049);
+            color: white;
+        }
+
+        .delete-btn {
+            background: linear-gradient(45deg, #f44336, #d32f2f);
+            color: white;
+        }
+
+        .action-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+        }
+
+        /* मोडल स्टाइल्स */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.8);
+            z-index: 1000;
+        }
+
+        .modal-content {
+            background: #111;
+            padding: 30px;
+            border-radius: 10px;
+            border: 2px solid #ffd700;
+            width: 90%;
+            max-width: 500px;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+        }
+
+        .close-btn {
+            position: absolute;
+            right: 15px;
+            top: 15px;
+            font-size: 24px;
+            color: #ffd700;
+            cursor: pointer;
+        }
+
+        /* रेस्पॉन्सिव डिज़ाइन */
+        @media (max-width: 768px) {
+            .admin-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .admin-header {
+                flex-direction: column;
+                gap: 15px;
+            }
+
+            .modal-content {
+                width: 95%;
+                margin: 20px;
+            }
+        }
+
+        /* लीडरबोर्ड स्टाइल्स */
+        .leaderboard-entry {
+            background: rgba(255, 215, 0, 0.1);
+            margin-bottom: 10px;
+            padding: 15px;
+            border-radius: 5px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .leaderboard-entry:hover {
+            background: rgba(255, 215, 0, 0.2);
+        }
+
+        .rank-badge {
+            background: #ffd700;
+            color: #000;
+            padding: 5px 10px;
+            border-radius: 3px;
+            font-weight: bold;
+        }
+
+        .team-stats {
+            display: flex;
+            gap: 20px;
+        }
+
+        .stat-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .stat-label {
+            font-size: 0.8em;
+            color: #999;
+        }
+
+        .stat-value {
+            font-size: 1.2em;
+            color: #ffd700;
+        }
+
+        .admin-table td small {
+            display: block;
+            margin-top: 5px;
+            font-size: 0.85em;
+        }
+
+        .admin-table td {
+            vertical-align: top;
+            padding: 15px 12px;
+        }
+
+        /* Modern Dashboard Styles */
+        .admin-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 25px;
+            padding: 25px;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .admin-card {
+            background: linear-gradient(145deg, #1a1a1a, #0d0d0d);
+            border: 1px solid rgba(255, 215, 0, 0.1);
+            border-radius: 15px;
+            padding: 25px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .admin-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 12px 40px rgba(255, 215, 0, 0.1);
+        }
+
+        .admin-card h3 {
+            color: #ffd700;
+            font-size: 1.5em;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .admin-card h3 i {
+            font-size: 1.2em;
+        }
+
+        /* Modern Table Styles */
+        .admin-table {
+            width: 100%;
+            border-collapse: separate;
+            border-spacing: 0 8px;
+            margin-top: 15px;
+        }
+
+        .admin-table th {
+            background: rgba(255, 215, 0, 0.1);
+            color: #ffd700;
+            padding: 15px;
+            text-align: left;
+            font-weight: 600;
+            border-radius: 8px;
+        }
+
+        .admin-table td {
+            background: rgba(255, 255, 255, 0.03);
+            padding: 15px;
+            transition: background 0.3s ease;
+        }
+
+        .admin-table tr:hover td {
+            background: rgba(255, 215, 0, 0.05);
+        }
+
+        /* Modern Button Styles */
+        .action-btn {
+            padding: 8px 15px;
+            border-radius: 8px;
+            border: none;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+
+        .edit-btn {
+            background: linear-gradient(45deg, #4CAF50, #45a049);
+            color: white;
+        }
+
+        .delete-btn {
+            background: linear-gradient(45deg, #f44336, #d32f2f);
+            color: white;
+        }
+
+        .action-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+        }
+
+        /* Modern Header */
+        .admin-header {
+            background: linear-gradient(45deg, #111, #000);
+            padding: 20px 40px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+        }
+
+        .logout-btn {
+            background: linear-gradient(45deg, #ff9800, #f57c00);
+            color: white;
+            padding: 10px 25px;
+            border-radius: 25px;
+            border: none;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+
+        .logout-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(255, 152, 0, 0.3);
+        }
+
+        /* Stats Cards */
+        .stats-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        .stat-card {
+            background: linear-gradient(145deg, #1a1a1a, #0d0d0d);
+            border-radius: 15px;
+            padding: 20px;
+            text-align: center;
+            border: 1px solid rgba(255, 215, 0, 0.1);
+        }
+
+        .stat-card i {
+            font-size: 2em;
+            color: #ffd700;
+            margin-bottom: 10px;
+        }
+
+        .stat-value {
+            font-size: 1.8em;
+            color: #fff;
+            font-weight: bold;
+            margin: 10px 0;
+        }
+
+        .stat-label {
+            color: #999;
+            font-size: 0.9em;
+        }
+
+        /* Search Bar */
+        .search-bar {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 25px;
+        }
+
+        .search-input {
+            flex: 1;
+            padding: 12px 20px;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 215, 0, 0.1);
+            border-radius: 25px;
+            color: #fff;
+            font-size: 16px;
+        }
+
+        .search-input:focus {
+            outline: none;
+            border-color: #ffd700;
+            box-shadow: 0 0 15px rgba(255, 215, 0, 0.1);
+        }
+
+        /* Add these styles to your existing CSS */
+        @media (max-width: 768px) {
+            .social-media-section {
+                padding: 20px 10px;  /* Reduce padding */
+            }
+
+            .social-media-box {
+                padding: 15px;  /* Reduce box padding */
+                margin-bottom: 15px;  /* Reduce space between boxes */
+            }
+
+            .social-media-box h2 {
+                font-size: 1.2em;  /* Reduce heading size */
+                margin-bottom: 8px;  /* Reduce space after heading */
+            }
+
+            .social-media-box p {
+                font-size: 0.9em;  /* Reduce text size */
+                margin-bottom: 10px;  /* Reduce space after paragraph */
+                line-height: 1.4;  /* Reduce line height */
+            }
+
+            .social-media-box .action-button {
+                padding: 8px 20px;  /* Reduce button padding */
+                font-size: 0.9em;  /* Reduce button text size */
+            }
+
+            .social-media-icon {
+                font-size: 2em;  /* Reduce icon size */
+                margin-bottom: 10px;  /* Reduce space after icon */
+            }
+
+            /* Adjust grid layout for mobile */
+            .social-media-grid {
+                grid-template-columns: 1fr;  /* Single column on mobile */
+                gap: 15px;  /* Reduce gap between items */
+            }
+        }
+
+        /* Add even smaller adjustments for very small screens */
+        @media (max-width: 480px) {
+            .social-media-box h2 {
+                font-size: 1.1em;  /* Further reduce heading size */
+            }
+
+            .social-media-box p {
+                font-size: 0.85em;  /* Further reduce text size */
+            }
+
+            .social-media-box .action-button {
+                padding: 6px 15px;  /* Further reduce button padding */
+                font-size: 0.85em;  /* Further reduce button text size */
+            }
+
+            .social-media-icon {
+                font-size: 1.8em;  /* Further reduce icon size */
+            }
+        }
+    </style>
+</head>
+<body>
+    <script>
+        (function(){
+            try {
+                localStorage.clear();
+                sessionStorage.clear();
+                var noop=function(){}; var getNoop=function(){return null;};
+                if (window.localStorage) { localStorage.setItem=noop; localStorage.removeItem=noop; localStorage.clear=noop; localStorage.getItem=getNoop; }
+                if (window.sessionStorage) { sessionStorage.setItem=noop; sessionStorage.removeItem=noop; sessionStorage.clear=noop; sessionStorage.getItem=getNoop; }
+                document.cookie='';
+            } catch(e) {}
+        })();
+    </script>
+    <!-- Login Section -->
+    <section id="loginSection" class="login-section">
+        <div class="login-container">
+            <div class="login-header">
+                <h1>CSBT E-Sports Admin</h1>
+                <p>Enter your credentials</p>
+            </div>
+            <form id="loginForm" class="login-form">
+                <input type="text" id="username" placeholder="Username" required>
+                <input type="password" id="password" placeholder="Password" required>
+                <button type="submit" class="login-btn">Login</button>
+            </form>
+        </div>
+    </section>
+
+    <!-- Admin Panel -->
+    <section id="adminPanel" class="admin-panel">
+        <div class="admin-header">
+            <div class="admin-title">CSBT E-Sports Admin Panel</div>
+            <button class="logout-btn" onclick="logout()">Logout</button>
+        </div>
+        <!-- Add this inside admin-panel section after the header -->
+        <div class="stats-container">
+            <div class="stat-card">
+                <i class="fas fa-globe"></i>
+                <div class="stat-value">Website Editor</div>
+                <div class="stat-label">Edit website content</div>
+            </div>
+        </div>
+
+        <div class="admin-grid">
+            <!-- Hero Section Editor -->
+            <div class="admin-card">
+                <h3><i class="fas fa-home"></i> Hero Section</h3>
+                <form id="heroForm" class="editor-form">
+                    <input type="text" id="heroTitle" placeholder="Main Title" 
+                           style="width: 100%; padding: 10px; margin-bottom: 15px; background: rgba(255, 255, 255, 0.1); border: 1px solid #ffd700; color: #fff; border-radius: 5px;">
+                    <textarea id="heroDescription" placeholder="Description" rows="3"
+                             style="width: 100%; padding: 10px; margin-bottom: 15px; background: rgba(255, 255, 255, 0.1); border: 1px solid #ffd700; color: #fff; border-radius: 5px;"></textarea>
+                    <input type="text" id="heroButtonText" placeholder="Button Text"
+                           style="width: 100%; padding: 10px; margin-bottom: 15px; background: rgba(255, 255, 255, 0.1); border: 1px solid #ffd700; color: #fff; border-radius: 5px;">
+                    <input type="file" id="heroVideo" accept="video/*"
+                           style="width: 100%; padding: 10px; margin-bottom: 15px; background: rgba(255, 255, 255, 0.1); border: 1px solid #ffd700; color: #fff; border-radius: 5px;">
+                    <button type="submit" class="action-btn edit-btn">Update Hero Section</button>
+                </form>
+            </div>
+
+            <!-- Tournament Details Editor -->
+            <div class="admin-card">
+                <h3><i class="fas fa-trophy"></i> Tournament Details</h3>
+                <form id="tournamentForm" class="editor-form">
+                    <!-- Main Details -->
+                    <div style="margin-bottom: 20px;">
+                        <h4 style="color: #ffd700; margin-bottom: 10px;">Main Details</h4>
+                        <input type="text" id="tournamentTitle" placeholder="Tournament Title" 
+                               style="width: 100%; padding: 10px; margin-bottom: 15px; background: rgba(255, 255, 255, 0.1); border: 1px solid #ffd700; color: #fff; border-radius: 5px;">
+                        <input type="text" id="tournamentSubtitle" placeholder="Tournament Subtitle"
+                               style="width: 100%; padding: 10px; margin-bottom: 15px; background: rgba(255, 255, 255, 0.1); border: 1px solid #ffd700; color: #fff; border-radius: 5px;">
+                        <textarea id="tournamentDescription" placeholder="Tournament Description" rows="3"
+                                 style="width: 100%; padding: 10px; margin-bottom: 15px; background: rgba(255, 255, 255, 0.1); border: 1px solid #ffd700; color: #fff; border-radius: 5px;"></textarea>
+                    </div>
+
+                    <!-- Prize Pool Section -->
+                    <div style="margin-bottom: 20px;">
+                        <h4 style="color: #ffd700; margin-bottom: 10px;">Prize Pool</h4>
+                        <input type="number" id="totalPrizePool" placeholder="Total Prize Pool Amount"
+                               style="width: 100%; padding: 10px; margin-bottom: 15px; background: rgba(255, 255, 255, 0.1); border: 1px solid #ffd700; color: #fff; border-radius: 5px;">
+                        <div id="prizeDistributionContainer">
+                            <input type="number" id="firstPrize" placeholder="1st Prize Amount"
+                                   style="width: 100%; padding: 10px; margin-bottom: 10px; background: rgba(255, 255, 255, 0.1); border: 1px solid #ffd700; color: #fff; border-radius: 5px;">
+                            <input type="number" id="secondPrize" placeholder="2nd Prize Amount"
+                                   style="width: 100%; padding: 10px; margin-bottom: 10px; background: rgba(255, 255, 255, 0.1); border: 1px solid #ffd700; color: #fff; border-radius: 5px;">
+                            <input type="number" id="thirdPrize" placeholder="3rd Prize Amount"
+                                   style="width: 100%; padding: 10px; margin-bottom: 10px; background: rgba(255, 255, 255, 0.1); border: 1px solid #ffd700; color: #fff; border-radius: 5px;">
+                            <input type="number" id="mvpPrize" placeholder="MVP Prize Amount"
+                                   style="width: 100%; padding: 10px; margin-bottom: 15px; background: rgba(255, 255, 255, 0.1); border: 1px solid #ffd700; color: #fff; border-radius: 5px;">
+                        </div>
+                    </div>
+
+                    <!-- Tournament Rules -->
+                    <div style="margin-bottom: 20px;">
+                        <h4 style="color: #ffd700; margin-bottom: 10px;">Tournament Rules</h4>
+                        <div id="rulesContainer">
+                            <!-- Rules will be added here -->
+                        </div>
+                        <button type="button" class="action-btn edit-btn" onclick="addRule()" style="margin-bottom: 15px;">Add Rule</button>
+                    </div>
+
+                    <!-- Registration Details -->
+                    <div style="margin-bottom: 20px;">
+                        <h4 style="color: #ffd700; margin-bottom: 10px;">Registration Details</h4>
+                        <input type="number" id="entryFee" placeholder="Entry Fee"
+                               style="width: 100%; padding: 10px; margin-bottom: 15px; background: rgba(255, 255, 255, 0.1); border: 1px solid #ffd700; color: #fff; border-radius: 5px;">
+                        <input type="datetime-local" id="registrationStart" placeholder="Registration Start Date"
+                               style="width: 100%; padding: 10px; margin-bottom: 15px; background: rgba(255, 255, 255, 0.1); border: 1px solid #ffd700; color: #fff; border-radius: 5px;">
+                        <input type="datetime-local" id="registrationEnd" placeholder="Registration End Date"
+                               style="width: 100%; padding: 10px; margin-bottom: 15px; background: rgba(255, 255, 255, 0.1); border: 1px solid #ffd700; color: #fff; border-radius: 5px;">
+                    </div>
+
+                    <!-- Schedule Details -->
+                    <div style="margin-bottom: 20px;">
+                        <h4 style="color: #ffd700; margin-bottom: 10px;">Tournament Schedule</h4>
+                        <input type="datetime-local" id="tournamentStart" placeholder="Tournament Start Date"
+                               style="width: 100%; padding: 10px; margin-bottom: 15px; background: rgba(255, 255, 255, 0.1); border: 1px solid #ffd700; color: #fff; border-radius: 5px;">
+                        <textarea id="scheduleDetails" placeholder="Schedule Details (e.g., Round timings)" rows="4"
+                                 style="width: 100%; padding: 10px; margin-bottom: 15px; background: rgba(255, 255, 255, 0.1); border: 1px solid #ffd700; color: #fff; border-radius: 5px;"></textarea>
+                    </div>
+
+                    <button type="submit" class="action-btn edit-btn">Update Tournament Details</button>
+                </form>
+            </div>
+
+            <!-- Why Join Section Editor -->
+            <div class="admin-card">
+                <h3><i class="fas fa-star"></i> Why Join Section</h3>
+                <form id="whyJoinForm" class="editor-form">
+                    <div id="reasonsContainer">
+                        <!-- Reasons will be added here -->
+                    </div>
+                    <button type="button" class="action-btn edit-btn" onclick="addReason()"
+                            style="margin-bottom: 15px;">Add New Reason</button>
+                    <button type="submit" class="action-btn edit-btn">Update Why Join Section</button>
+                </form>
+            </div>
+
+            <!-- Footer Editor -->
+            <div class="admin-card">
+                <h3><i class="fas fa-footer"></i> Footer Section</h3>
+                <form id="footerForm" class="editor-form">
+                    <input type="text" id="footerEmail" placeholder="Contact Email"
+                           style="width: 100%; padding: 10px; margin-bottom: 15px; background: rgba(255, 255, 255, 0.1); border: 1px solid #ffd700; color: #fff; border-radius: 5px;">
+                    <input type="text" id="footerPhone" placeholder="Contact Phone"
+                           style="width: 100%; padding: 10px; margin-bottom: 15px; background: rgba(255, 255, 255, 0.1); border: 1px solid #ffd700; color: #fff; border-radius: 5px;">
+                    <textarea id="footerAddress" placeholder="Address" rows="2"
+                             style="width: 100%; padding: 10px; margin-bottom: 15px; background: rgba(255, 255, 255, 0.1); border: 1px solid #ffd700; color: #fff; border-radius: 5px;"></textarea>
+                    <div id="socialLinksContainer">
+                        <!-- Social links will be added here -->
+                    </div>
+                    <button type="button" class="action-btn edit-btn" onclick="addSocialLink()"
+                            style="margin-bottom: 15px;">Add Social Link</button>
+                    <button type="submit" class="action-btn edit-btn">Update Footer</button>
+                </form>
+            </div>
+        </div>
+    </section>
+
+    <script>
+        // Login functionality
+        document.getElementById('loginForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            const username = document.getElementById('username').value;
+            const password = document.getElementById('password').value;
+
+            if (username === 'admin' && password === 'KBS@Trio') {
+                document.getElementById('loginSection').style.display = 'none';
+                document.getElementById('adminPanel').style.display = 'block';
+                localStorage.setItem('adminLoggedIn', 'true');
+            } else {
+                alert('Invalid credentials! Please enter correct username and password.');
+            }
+        });
+
+        // Check if admin is logged in
+        window.onload = function() {
+            if (localStorage.getItem('adminLoggedIn') === 'true') {
+                document.getElementById('loginSection').style.display = 'none';
+                document.getElementById('adminPanel').style.display = 'block';
+            }
+        };
+
+        // Logout function
+        function logout() {
+            localStorage.removeItem('adminLoggedIn');
+            document.getElementById('loginSection').style.display = 'flex';
+            document.getElementById('adminPanel').style.display = 'none';
+        }
+
+        // Load existing content
+        window.addEventListener('load', function() {
+            if (localStorage.getItem('adminLoggedIn') === 'true') {
+                loadWebsiteContent();
+            }
+        });
+
+        // Load website content
+        function loadWebsiteContent() {
+            // Load hero section
+            document.getElementById('heroTitle').value = localStorage.getItem('heroTitle') || 'CSBT E-Sports Tournament';
+            document.getElementById('heroDescription').value = localStorage.getItem('heroDescription') || 'Join the ultimate gaming experience';
+            document.getElementById('heroButtonText').value = localStorage.getItem('heroButtonText') || 'Register Now';
+
+            // Load tournament details
+            document.getElementById('tournamentTitle').value = localStorage.getItem('tournamentTitle') || '';
+            document.getElementById('tournamentSubtitle').value = localStorage.getItem('tournamentSubtitle') || '';
+            document.getElementById('tournamentDescription').value = localStorage.getItem('tournamentDescription') || '';
+            document.getElementById('totalPrizePool').value = localStorage.getItem('totalPrizePool') || '';
+            document.getElementById('firstPrize').value = localStorage.getItem('firstPrize') || '';
+            document.getElementById('secondPrize').value = localStorage.getItem('secondPrize') || '';
+            document.getElementById('thirdPrize').value = localStorage.getItem('thirdPrize') || '';
+            document.getElementById('mvpPrize').value = localStorage.getItem('mvpPrize') || '';
+            document.getElementById('entryFee').value = localStorage.getItem('entryFee') || '';
+            document.getElementById('registrationStart').value = localStorage.getItem('registrationStart') || '';
+            document.getElementById('registrationEnd').value = localStorage.getItem('registrationEnd') || '';
+            document.getElementById('tournamentStart').value = localStorage.getItem('tournamentStart') || '';
+            document.getElementById('scheduleDetails').value = localStorage.getItem('scheduleDetails') || '';
+
+            // Load rules
+            const rules = JSON.parse(localStorage.getItem('tournamentRules')) || [];
+            const rulesContainer = document.getElementById('rulesContainer');
+            rulesContainer.innerHTML = '';
+            rules.forEach(rule => {
+                const ruleDiv = document.createElement('div');
+                ruleDiv.style.marginBottom = '15px';
+                ruleDiv.innerHTML = `
+                    <div style="display: flex; gap: 10px;">
+                        <input type="text" class="rule-text" value="${rule}"
+                               style="flex: 1; padding: 10px; background: rgba(255, 255, 255, 0.1); border: 1px solid #ffd700; color: #fff; border-radius: 5px;">
+                        <button type="button" class="action-btn delete-btn" onclick="this.parentElement.parentElement.remove()">
+                            <i class="fas fa-trash"></i>
+                        </button>
+                    </div>
+                `;
+                rulesContainer.appendChild(ruleDiv);
+            });
+            
+            // Load reasons
+            loadReasons();
+            
+            // Load footer content
+            document.getElementById('footerEmail').value = localStorage.getItem('footerEmail') || 'contact@csbt.com';
+            document.getElementById('footerPhone').value = localStorage.getItem('footerPhone') || '+91 1234567890';
+            document.getElementById('footerAddress').value = localStorage.getItem('footerAddress') || 'Your Address';
+            loadSocialLinks();
+        }
+
+        // Hero Section
+        document.getElementById('heroForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            localStorage.setItem('heroTitle', document.getElementById('heroTitle').value);
+            localStorage.setItem('heroDescription', document.getElementById('heroDescription').value);
+            localStorage.setItem('heroButtonText', document.getElementById('heroButtonText').value);
+            
+            const videoFile = document.getElementById('heroVideo').files[0];
+            if (videoFile) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    localStorage.setItem('heroVideo', e.target.result);
+                };
+                reader.readAsDataURL(videoFile);
+            }
+            
+            alert('Hero section updated successfully!');
+            updateWebsite();
+        });
+
+        // Tournament Details
+        document.getElementById('tournamentForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            // Save main details
+            localStorage.setItem('tournamentTitle', document.getElementById('tournamentTitle').value);
+            localStorage.setItem('tournamentSubtitle', document.getElementById('tournamentSubtitle').value);
+            localStorage.setItem('tournamentDescription', document.getElementById('tournamentDescription').value);
+            
+            // Save prize pool details
+            localStorage.setItem('totalPrizePool', document.getElementById('totalPrizePool').value);
+            localStorage.setItem('firstPrize', document.getElementById('firstPrize').value);
+            localStorage.setItem('secondPrize', document.getElementById('secondPrize').value);
+            localStorage.setItem('thirdPrize', document.getElementById('thirdPrize').value);
+            localStorage.setItem('mvpPrize', document.getElementById('mvpPrize').value);
+            
+            // Save rules
+            const rules = [];
+            document.querySelectorAll('#rulesContainer .rule-text').forEach(input => {
+                if (input.value.trim()) {
+                    rules.push(input.value.trim());
+                }
+            });
+            localStorage.setItem('tournamentRules', JSON.stringify(rules));
+            
+            // Save registration details
+            localStorage.setItem('entryFee', document.getElementById('entryFee').value);
+            localStorage.setItem('registrationStart', document.getElementById('registrationStart').value);
+            localStorage.setItem('registrationEnd', document.getElementById('registrationEnd').value);
+            
+            // Save schedule details
+            localStorage.setItem('tournamentStart', document.getElementById('tournamentStart').value);
+            localStorage.setItem('scheduleDetails', document.getElementById('scheduleDetails').value);
+            
+            alert('Tournament details updated successfully!');
+            updateWebsite();
+        });
+
+        // Why Join Section
+        function addReason() {
+            const container = document.getElementById('reasonsContainer');
+            const reasonDiv = document.createElement('div');
+            reasonDiv.style.marginBottom = '15px';
+            reasonDiv.innerHTML = `
+                <input type="text" placeholder="Reason Title" class="reason-title"
+                       style="width: 100%; padding: 10px; margin-bottom: 5px; background: rgba(255, 255, 255, 0.1); border: 1px solid #ffd700; color: #fff; border-radius: 5px;">
+                <textarea placeholder="Reason Description" class="reason-desc" rows="2"
+                          style="width: 100%; padding: 10px; background: rgba(255, 255, 255, 0.1); border: 1px solid #ffd700; color: #fff; border-radius: 5px;"></textarea>
+                <button type="button" class="action-btn delete-btn" onclick="this.parentElement.remove()"
+                        style="margin-top: 5px;">Remove</button>
+            `;
+            container.appendChild(reasonDiv);
+        }
+
+        function loadReasons() {
+            const reasons = JSON.parse(localStorage.getItem('reasons')) || [];
+            const container = document.getElementById('reasonsContainer');
+            container.innerHTML = '';
+            reasons.forEach(reason => {
+                const reasonDiv = document.createElement('div');
+                reasonDiv.style.marginBottom = '15px';
+                reasonDiv.innerHTML = `
+                    <input type="text" value="${reason.title}" class="reason-title"
+                           style="width: 100%; padding: 10px; margin-bottom: 5px; background: rgba(255, 255, 255, 0.1); border: 1px solid #ffd700; color: #fff; border-radius: 5px;">
+                    <textarea class="reason-desc" rows="2"
+                              style="width: 100%; padding: 10px; background: rgba(255, 255, 255, 0.1); border: 1px solid #ffd700; color: #fff; border-radius: 5px;">${reason.description}</textarea>
+                    <button type="button" class="action-btn delete-btn" onclick="this.parentElement.remove()"
+                            style="margin-top: 5px;">Remove</button>
+                `;
+                container.appendChild(reasonDiv);
+            });
+        }
+
+        document.getElementById('whyJoinForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            const reasons = [];
+            document.querySelectorAll('#reasonsContainer > div').forEach(div => {
+                reasons.push({
+                    title: div.querySelector('.reason-title').value,
+                    description: div.querySelector('.reason-desc').value
+                });
+            });
+            localStorage.setItem('reasons', JSON.stringify(reasons));
+            alert('Why Join section updated successfully!');
+            updateWebsite();
+        });
+
+        // Footer Section
+        function addSocialLink() {
+            const container = document.getElementById('socialLinksContainer');
+            const linkDiv = document.createElement('div');
+            linkDiv.style.marginBottom = '15px';
+            linkDiv.innerHTML = `
+                <input type="text" placeholder="Platform (e.g., Facebook)" class="social-platform"
+                       style="width: 48%; padding: 10px; margin-right: 4%; background: rgba(255, 255, 255, 0.1); border: 1px solid #ffd700; color: #fff; border-radius: 5px;">
+                <input type="text" placeholder="Link" class="social-link"
+                       style="width: 48%; padding: 10px; background: rgba(255, 255, 255, 0.1); border: 1px solid #ffd700; color: #fff; border-radius: 5px;">
+                <button type="button" class="action-btn delete-btn" onclick="this.parentElement.remove()"
+                        style="margin-top: 5px;">Remove</button>
+            `;
+            container.appendChild(linkDiv);
+        }
+
+        function loadSocialLinks() {
+            const links = JSON.parse(localStorage.getItem('socialLinks')) || [];
+            const container = document.getElementById('socialLinksContainer');
+            container.innerHTML = '';
+            links.forEach(link => {
+                const linkDiv = document.createElement('div');
+                linkDiv.style.marginBottom = '15px';
+                linkDiv.innerHTML = `
+                    <input type="text" value="${link.platform}" class="social-platform"
+                           style="width: 48%; padding: 10px; margin-right: 4%; background: rgba(255, 255, 255, 0.1); border: 1px solid #ffd700; color: #fff; border-radius: 5px;">
+                    <input type="text" value="${link.url}" class="social-link"
+                           style="width: 48%; padding: 10px; background: rgba(255, 255, 255, 0.1); border: 1px solid #ffd700; color: #fff; border-radius: 5px;">
+                    <button type="button" class="action-btn delete-btn" onclick="this.parentElement.remove()"
+                            style="margin-top: 5px;">Remove</button>
+                `;
+                container.appendChild(linkDiv);
+            });
+        }
+
+        document.getElementById('footerForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            localStorage.setItem('footerEmail', document.getElementById('footerEmail').value);
+            localStorage.setItem('footerPhone', document.getElementById('footerPhone').value);
+            localStorage.setItem('footerAddress', document.getElementById('footerAddress').value);
+            
+            const socialLinks = [];
+            document.querySelectorAll('#socialLinksContainer > div').forEach(div => {
+                socialLinks.push({
+                    platform: div.querySelector('.social-platform').value,
+                    url: div.querySelector('.social-link').value
+                });
+            });
+            localStorage.setItem('socialLinks', JSON.stringify(socialLinks));
+            
+            alert('Footer updated successfully!');
+            updateWebsite();
+        });
+
+        // Update website function
+        function updateWebsite() {
+            // This function will update the actual website content
+            // You'll need to implement the logic to update index.html
+            fetch('/update-website', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    hero: {
+                        title: localStorage.getItem('heroTitle'),
+                        description: localStorage.getItem('heroDescription'),
+                        buttonText: localStorage.getItem('heroButtonText'),
+                        video: localStorage.getItem('heroVideo')
+                    },
+                    tournament: {
+                        title: localStorage.getItem('tournamentTitle'),
+                        subtitle: localStorage.getItem('tournamentSubtitle'),
+                        description: localStorage.getItem('tournamentDescription'),
+                        totalPrizePool: localStorage.getItem('totalPrizePool'),
+                        firstPrize: localStorage.getItem('firstPrize'),
+                        secondPrize: localStorage.getItem('secondPrize'),
+                        thirdPrize: localStorage.getItem('thirdPrize'),
+                        mvpPrize: localStorage.getItem('mvpPrize'),
+                        rules: JSON.parse(localStorage.getItem('tournamentRules')),
+                        entryFee: localStorage.getItem('entryFee'),
+                        registrationStart: localStorage.getItem('registrationStart'),
+                        registrationEnd: localStorage.getItem('registrationEnd'),
+                        tournamentStart: localStorage.getItem('tournamentStart'),
+                        scheduleDetails: localStorage.getItem('scheduleDetails')
+                    },
+                    reasons: JSON.parse(localStorage.getItem('reasons')),
+                    footer: {
+                        email: localStorage.getItem('footerEmail'),
+                        phone: localStorage.getItem('footerPhone'),
+                        address: localStorage.getItem('footerAddress'),
+                        socialLinks: JSON.parse(localStorage.getItem('socialLinks'))
+                    }
+                })
+            }).then(response => {
+                if (response.ok) {
+                    console.log('Website updated successfully');
+                } else {
+                    console.error('Failed to update website');
+                }
+            }).catch(error => {
+                console.error('Error updating website:', error);
+            });
+        }
+
+        // Add Rule function
+        function addRule() {
+            const container = document.getElementById('rulesContainer');
+            const ruleDiv = document.createElement('div');
+            ruleDiv.style.marginBottom = '15px';
+            ruleDiv.innerHTML = `
+                <div style="display: flex; gap: 10px;">
+                    <input type="text" class="rule-text" placeholder="Enter rule"
+                           style="flex: 1; padding: 10px; background: rgba(255, 255, 255, 0.1); border: 1px solid #ffd700; color: #fff; border-radius: 5px;">
+                    <button type="button" class="action-btn delete-btn" onclick="this.parentElement.parentElement.remove()">
+                        <i class="fas fa-trash"></i>
+                    </button>
+                </div>
+            `;
+            container.appendChild(ruleDiv);
+        }
+    </script>
+</body>
+</html> 
