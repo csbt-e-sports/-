@@ -1,0 +1,818 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Payment</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <style>
+        @keyframes float {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-10px); }
+        }
+        @keyframes shimmer {
+            0% { background-position: -1000px 0; }
+            100% { background-position: 1000px 0; }
+        }
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.6; }
+        }
+        html, body {
+            height: 100%;
+            margin: 0;
+            background: 
+                radial-gradient(circle at 20% 30%, rgba(255,215,0,0.15) 0%, transparent 50%),
+                radial-gradient(circle at 80% 70%, rgba(255,153,0,0.12) 0%, transparent 50%),
+                radial-gradient(circle at 50% 50%, rgba(255,215,0,0.08) 0%, transparent 70%),
+                linear-gradient(135deg, #0a0a0a 0%, #000000 100%);
+            background-size: 100% 100%, 100% 100%, 100% 100%, 100% 100%;
+            color: #fff;
+            font-family: 'Arial', 'Segoe UI', sans-serif;
+            position: relative;
+            overflow-x: hidden;
+        }
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: 
+                radial-gradient(2px 2px at 20% 30%, rgba(255,215,0,0.1), transparent),
+                radial-gradient(2px 2px at 60% 70%, rgba(255,153,0,0.08), transparent),
+                radial-gradient(1px 1px at 50% 50%, rgba(255,215,0,0.05), transparent);
+            background-size: 200% 200%, 200% 200%, 300% 300%;
+            animation: float 20s ease-in-out infinite;
+            pointer-events: none;
+            z-index: 0;
+        }
+        .container {
+            min-height: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+            position: relative;
+            z-index: 1;
+        }
+        .card {
+            width: 100%;
+            max-width: 520px;
+            background: linear-gradient(135deg, rgba(17,17,17,0.95) 0%, rgba(20,20,20,0.9) 100%);
+            border: 2px solid rgba(255, 215, 0, 0.2);
+            border-radius: 20px;
+            padding: 0;
+            box-shadow: 
+                0 25px 70px rgba(0,0,0,0.8),
+                0 0 60px rgba(255,215,0,0.1),
+                inset 0 1px 0 rgba(255,215,0,0.1);
+            backdrop-filter: blur(15px);
+            overflow: hidden;
+            position: relative;
+            animation: float 6s ease-in-out infinite;
+        }
+        .card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,215,0,0.1), transparent);
+            animation: shimmer 3s infinite;
+        }
+        .card-header {
+            background: linear-gradient(135deg, rgba(255,215,0,0.2), rgba(255,153,0,0.15));
+            border-bottom: 2px solid rgba(255,215,0,0.3);
+            padding: 22px 24px;
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            position: relative;
+            overflow: hidden;
+        }
+        .card-header::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.1), transparent);
+            animation: shimmer 2s infinite;
+        }
+        .card-body { 
+            padding: 28px 24px;
+            position: relative;
+            z-index: 1;
+        }
+        .title {
+            margin: 0 0 8px 0;
+            font-size: 24px;
+            color: #ffd700;
+            text-align: left;
+            font-weight: 800;
+            text-shadow: 0 0 20px rgba(255,215,0,0.5);
+            letter-spacing: 0.5px;
+        }
+        .subtitle {
+            font-size: 14px;
+            color: #ccc;
+            text-align: left;
+            margin-bottom: 16px;
+        }
+        .qr {
+            display: block;
+            width: 240px;
+            height: 240px;
+            object-fit: contain;
+            margin: 12px auto 20px auto;
+            border-radius: 16px;
+            border: 3px solid rgba(255,215,0,0.4);
+            background: #fff;
+            box-shadow: 
+                0 10px 30px rgba(0,0,0,0.5),
+                0 0 40px rgba(255,215,0,0.2),
+                inset 0 0 20px rgba(255,215,0,0.05);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            position: relative;
+            animation: pulse 3s ease-in-out infinite;
+        }
+        .qr:hover {
+            transform: scale(1.02);
+            box-shadow: 
+                0 15px 40px rgba(0,0,0,0.6),
+                0 0 50px rgba(255,215,0,0.3),
+                inset 0 0 25px rgba(255,215,0,0.08);
+        }
+        .instruction {
+            font-size: 14px;
+            color: #eee;
+            text-align: left;
+            background: linear-gradient(135deg, rgba(13,13,13,0.9), rgba(18,18,18,0.85));
+            border: 2px solid rgba(255,215,0,0.2);
+            border-radius: 14px;
+            padding: 16px;
+            margin-bottom: 20px;
+            line-height: 1.6;
+            box-shadow: 
+                0 8px 20px rgba(0,0,0,0.4),
+                inset 0 1px 0 rgba(255,215,0,0.05);
+        }
+        .steps { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin: 14px 0 18px; }
+        .step {
+            background: linear-gradient(135deg, rgba(255,215,0,0.12), rgba(255,153,0,0.08));
+            border: 2px solid rgba(255,215,0,0.25);
+            padding: 12px 8px;
+            border-radius: 12px;
+            text-align: center;
+            font-size: 12px;
+            color: #ddd;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+        }
+        .step:hover {
+            transform: translateY(-2px);
+            border-color: rgba(255,215,0,0.4);
+            box-shadow: 0 6px 18px rgba(255,215,0,0.2);
+        }
+        .step strong { 
+            color: #ffd700; 
+            font-size: 13px; 
+            display: block; 
+            margin-bottom: 6px; 
+            font-weight: 700;
+            text-shadow: 0 0 10px rgba(255,215,0,0.3);
+        }
+        .app-row { display:flex; align-items:center; gap:10px; justify-content:center; margin-bottom: 12px; opacity:0.9 }
+        .badge-secure { display:flex; align-items:center; gap:8px; font-size:12px; color:#9ee09e; margin-top:6px; }
+        .badge-secure i { color:#28a745; }
+        .form-group {
+            margin-bottom: 12px;
+        }
+        label {
+            display: block;
+            font-size: 14px;
+            color: #ddd;
+            margin-bottom: 6px;
+        }
+        .form-group {
+            position: relative;
+        }
+        .form-group i {
+            position: absolute;
+            left: 14px;
+            top: 42px;
+            color: rgba(255,215,0,0.6);
+            z-index: 2;
+            font-size: 16px;
+        }
+        input[type="text"] {
+            width: 100%;
+            padding: 14px 14px 14px 42px;
+            border-radius: 12px;
+            border: 2px solid rgba(255,215,0,0.25);
+            background: linear-gradient(135deg, rgba(11,11,11,0.9), rgba(15,15,15,0.85));
+            color: #fff;
+            box-sizing: border-box;
+            transition: all .3s ease;
+            font-size: 15px;
+        }
+        input[type="text"]:focus { 
+            outline: none; 
+            border-color: #ffd700; 
+            box-shadow: 
+                0 0 0 4px rgba(255,215,0,0.15),
+                0 0 20px rgba(255,215,0,0.2);
+            background: linear-gradient(135deg, rgba(15,15,15,0.95), rgba(20,20,20,0.9));
+        }
+        input[type="text"]:not(:placeholder-shown) {
+            border-color: rgba(255,215,0,0.4);
+        }
+        input[type="text"]::placeholder {
+            color: #888;
+        }
+        input.error {
+            border-color: #ff4444 !important;
+            box-shadow: 0 0 0 2px rgba(255, 68, 68, 0.15);
+        }
+        .error-message {
+            color: #ff4444;
+            font-size: 13px;
+            margin-top: 6px;
+            display: none;
+        }
+        .btn {
+            width: 100%;
+            padding: 16px 20px;
+            border: none;
+            border-radius: 14px;
+            background: linear-gradient(135deg, #ffd700 0%, #ffb700 50%, #ff9900 100%);
+            color: #000;
+            font-weight: 800;
+            font-size: 16px;
+            cursor: pointer;
+            margin-top: 16px;
+            box-shadow: 
+                0 12px 30px rgba(255, 153, 0, 0.3),
+                0 0 30px rgba(255,215,0,0.2),
+                inset 0 1px 0 rgba(255,255,255,0.2);
+            transition: all .3s ease;
+            position: relative;
+            overflow: hidden;
+            letter-spacing: 0.5px;
+            text-transform: uppercase;
+        }
+        .btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
+            transition: left 0.5s ease;
+        }
+        .btn:hover { 
+            transform: translateY(-2px); 
+            box-shadow: 
+                0 16px 40px rgba(255,153,0,0.4),
+                0 0 40px rgba(255,215,0,0.3),
+                inset 0 1px 0 rgba(255,255,255,0.3);
+            background: linear-gradient(135deg, #ffb700 0%, #ffd700 50%, #ffb700 100%);
+        }
+        .btn:hover::before {
+            left: 100%;
+        }
+        .btn:active {
+            transform: translateY(0);
+        }
+        .btn i { margin-left: 8px; }
+        .note {
+            font-size: 12px;
+            color: #aaa;
+            text-align: center;
+            margin-top: 10px;
+        }
+        .success-box {
+            display: none;
+            background: linear-gradient(135deg, rgba(13,13,13,0.95), rgba(20,40,20,0.9));
+            border: 2px solid rgba(46, 213, 115, 0.4);
+            border-radius: 16px;
+            padding: 28px;
+            text-align: center;
+            color: #e6ffe6;
+            margin-top: 16px;
+            box-shadow: 
+                0 15px 40px rgba(0,0,0,0.6),
+                0 0 40px rgba(46,213,115,0.2),
+                inset 0 1px 0 rgba(255,255,255,0.1);
+            animation: float 4s ease-in-out infinite;
+        }
+        .success-box h2 {
+            color: #2ed573;
+            margin: 0 0 12px 0;
+            font-size: 24px;
+            font-weight: 800;
+            text-shadow: 0 0 20px rgba(46,213,115,0.5);
+        }
+        .success-box h2::before {
+            content: '✓ ';
+            color: #2ed573;
+            font-size: 28px;
+            margin-right: 8px;
+        }
+        .success-box p {
+            margin: 0;
+            color: #cfcfcf;
+            font-size: 14px;
+        }
+        /* Loading Overlay */
+        .loading-overlay {
+            display: none;
+            position: fixed;
+            inset: 0;
+            background: rgba(0,0,0,0.8);
+            z-index: 5000;
+            align-items: center;
+            justify-content: center;
+            flex-direction: column;
+        }
+        .loading-spinner {
+            width: 50px;
+            height: 50px;
+            border: 5px solid #f3f3f3;
+            border-top: 5px solid #ffd700;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+        .loading-text {
+            color: #ffd700;
+            margin-top: 12px;
+            font-weight: 700;
+        }
+        @keyframes spin { 0% { transform: rotate(0deg);} 100% { transform: rotate(360deg);} }
+    </style>
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
+    <meta http-equiv="Pragma" content="no-cache" />
+    <meta http-equiv="Expires" content="0" />
+    <script>
+        // UTR Database - Server-side approach with IndexedDB for local persistence
+        // This ensures UTRs cannot be reused across sessions, browsers, or devices
+        
+        function onlyDigits(value) {
+            return value.replace(/[^0-9]/g, '');
+        }
+        
+        function setupPaymentForm() {
+            // DOM elements
+            const utrInput = document.getElementById('utr');
+            const payerInput = document.getElementById('payerName');
+            const utrError = document.getElementById('utrError');
+            const payerError = document.getElementById('payerError');
+            const form = document.getElementById('paymentForm');
+            const successBox = document.getElementById('successBox');
+            const title = document.querySelector('.title');
+            const subtitle = document.querySelector('.subtitle');
+            const qr = document.querySelector('.qr');
+            const instruction = document.querySelector('.instruction');
+            const submitBtn = form.querySelector('button[type="submit"]');
+            
+            // API endpoint for server-side validation
+            const ENDPOINT_URL = 'https://script.google.com/macros/s/AKfycbwu8MBXyjKntMENsJv8C-UD7hjrFGsU1n8yEjwpt-VKe3rzioxnX5Q0cyWYwYOcKjd9bg/exec';
+            
+            // In-memory cache of used UTRs for this session
+            const usedUTRsCache = new Set();
+            
+            // IndexedDB setup for persistent storage
+            let db;
+            const DB_NAME = 'UTRDatabase';
+            const STORE_NAME = 'usedUTRs';
+            const DB_VERSION = 1;
+            
+            // Initialize IndexedDB
+            function initDatabase() {
+                return new Promise((resolve, reject) => {
+                    const request = indexedDB.open(DB_NAME, DB_VERSION);
+                    
+                    request.onerror = (event) => {
+                        console.error("IndexedDB error:", event.target.error);
+                        reject("Could not open UTR database");
+                    };
+                    
+                    request.onsuccess = (event) => {
+                        db = event.target.result;
+                        console.log("Database opened successfully");
+                        loadUsedUTRsFromDB();
+                        resolve(db);
+                    };
+                    
+                    request.onupgradeneeded = (event) => {
+                        const db = event.target.result;
+                        if (!db.objectStoreNames.contains(STORE_NAME)) {
+                            db.createObjectStore(STORE_NAME, { keyPath: 'utr' });
+                            console.log("Object store created");
+                        }
+                    };
+                });
+            }
+            
+            // Load used UTRs from IndexedDB into memory cache
+            function loadUsedUTRsFromDB() {
+                if (!db) return;
+                
+                const transaction = db.transaction([STORE_NAME], "readonly");
+                const store = transaction.objectStore(STORE_NAME);
+                const request = store.getAll();
+                
+                request.onsuccess = (event) => {
+                    const utrs = event.target.result;
+                    utrs.forEach(item => usedUTRsCache.add(item.utr));
+                    console.log(`Loaded ${usedUTRsCache.size} UTRs from database`);
+                };
+                
+                request.onerror = (event) => {
+                    console.error("Error loading UTRs from database:", event.target.error);
+                };
+            }
+            
+            // Check if UTR exists in database
+            function isUTRUsedInDB(utr) {
+                return new Promise((resolve, reject) => {
+                    if (!db) {
+                        resolve(false);
+                        return;
+                    }
+                    
+                    // First check memory cache for performance
+                    if (usedUTRsCache.has(utr)) {
+                        resolve(true);
+                        return;
+                    }
+                    
+                    const transaction = db.transaction([STORE_NAME], "readonly");
+                    const store = transaction.objectStore(STORE_NAME);
+                    const request = store.get(utr);
+                    
+                    request.onsuccess = (event) => {
+                        const result = !!event.target.result;
+                        if (result) usedUTRsCache.add(utr); // Add to cache if found
+                        resolve(result);
+                    };
+                    
+                    request.onerror = (event) => {
+                        console.error("Error checking UTR in database:", event.target.error);
+                        resolve(false); // Assume not used if error
+                    };
+                });
+            }
+            
+            // Check if UTR exists on server
+            async function isUTRUsedOnServer(utr) {
+                try {
+                    const response = await fetch(`${ENDPOINT_URL}?action=checkUtr&utr=${utr}`);
+                    if (response.ok) {
+                        const data = await response.json();
+                        return data.exists;
+                    }
+                    return false;
+                } catch (error) {
+                    console.error("Error checking UTR on server:", error);
+                    return false; // Assume not used if server error
+                }
+            }
+            
+            // Comprehensive UTR check (local DB + server)
+            async function isUTRUsed(utr) {
+                // First check local cache and database
+                const usedLocally = await isUTRUsedInDB(utr);
+                if (usedLocally) return true;
+                
+                // Then check with server
+                const usedOnServer = await isUTRUsedOnServer(utr);
+                if (usedOnServer) {
+                    // Add to local database if found on server
+                    addUTRtoDB(utr);
+                    return true;
+                }
+                
+                return false;
+            }
+            
+            // Add UTR to database
+            function addUTRtoDB(utr) {
+                if (!db) return;
+                
+                // Add to memory cache
+                usedUTRsCache.add(utr);
+                
+                // Add to IndexedDB
+                const transaction = db.transaction([STORE_NAME], "readwrite");
+                const store = transaction.objectStore(STORE_NAME);
+                const request = store.add({ utr: utr, timestamp: Date.now() });
+                
+                request.onerror = (event) => {
+                    console.error("Error adding UTR to database:", event.target.error);
+                };
+            }
+            
+            // Disable form resubmission on page refresh
+            if (window.history.replaceState) {
+                window.history.replaceState(null, null, window.location.href);
+            }
+            
+            // Input validation for UTR
+            utrInput.addEventListener('input', function() {
+                this.value = onlyDigits(this.value).slice(0, 12);
+                this.classList.remove('error');
+                utrError.style.display = 'none';
+                updateSubmitState();
+            });
+            
+            // Check UTR when user leaves the field
+            utrInput.addEventListener('blur', async function() {
+                const utr = this.value.trim();
+                
+                if (utr.length === 12) {
+                    // Show checking indicator
+                    utrError.style.display = 'block';
+                    utrError.style.color = '#ffd700';
+                    utrError.textContent = 'Checking UTR...';
+                    
+                    // Check if UTR is already used
+                    const used = await isUTRUsed(utr);
+                    if (used) {
+                        utrError.style.color = '#ff4444';
+                        utrError.textContent = 'This UTR has already been used';
+                        this.classList.add('error');
+                    } else {
+                        utrError.style.display = 'none';
+                    }
+                    
+                    updateSubmitState();
+                } else if (utr.length > 0) {
+                    utrError.style.color = '#ff4444';
+                    utrError.textContent = 'UTR must be exactly 12 digits';
+                    utrError.style.display = 'block';
+                    this.classList.add('error');
+                }
+            });
+            
+            // Input validation for payer name
+            payerInput.addEventListener('input', function() {
+                this.classList.remove('error');
+                payerError.style.display = 'none';
+                updateSubmitState();
+            });
+            
+            // Update submit button state
+            function updateSubmitState() {
+                const ok = (utrInput.value && utrInput.value.length === 12) && 
+                          (payerInput.value && payerInput.value.trim().length > 0) &&
+                          !utrInput.classList.contains('error');
+                
+                if (submitBtn) {
+                    submitBtn.disabled = !ok;
+                    submitBtn.style.opacity = ok ? '1' : '0.6';
+                    submitBtn.style.cursor = ok ? 'pointer' : 'not-allowed';
+                }
+            }
+            
+            // Initialize button state
+            updateSubmitState();
+            
+            // Get query parameter helper
+            function getQueryParam(name) {
+                const url = new URL(window.location.href);
+                return url.searchParams.get(name);
+            }
+            
+            // Form submission handler
+            form.addEventListener('submit', async function(e) {
+                e.preventDefault();
+                
+                // Disable submit button to prevent double submission
+                if (submitBtn) {
+                    submitBtn.disabled = true;
+                    submitBtn.style.opacity = '0.6';
+                    submitBtn.style.cursor = 'not-allowed';
+                    submitBtn.textContent = 'Processing...';
+                }
+                
+                let valid = true;
+                
+                // Validate UTR format
+                if (utrInput.value.length !== 12) {
+                    utrInput.classList.add('error');
+                    utrError.textContent = 'UTR must be exactly 12 digits';
+                    utrError.style.display = 'block';
+                    valid = false;
+                }
+                
+                // Validate payer name
+                if (!payerInput.value || !payerInput.value.trim()) {
+                    payerInput.classList.add('error');
+                    payerError.textContent = 'Please enter payer name';
+                    payerError.style.display = 'block';
+                    valid = false;
+                }
+                
+                if (!valid) {
+                    const firstInvalid = utrInput.classList.contains('error') ? utrInput : payerInput;
+                    firstInvalid.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                    if (firstInvalid === utrInput) utrInput.focus();
+                    
+                    // Re-enable submit button
+                    if (submitBtn) {
+                        submitBtn.disabled = false;
+                        submitBtn.style.opacity = '1';
+                        submitBtn.style.cursor = 'pointer';
+                        submitBtn.textContent = 'Submit Payment';
+                    }
+                    
+                    return false;
+                }
+                
+                // Final check if UTR is already used
+                const utr = utrInput.value.trim();
+                const used = await isUTRUsed(utr);
+                if (used) {
+                    utrError.textContent = 'This UTR has already been used';
+                    utrError.style.display = 'block';
+                    utrInput.classList.add('error');
+                    utrInput.focus();
+                    
+                    // Re-enable submit button
+                    if (submitBtn) {
+                        submitBtn.disabled = false;
+                        submitBtn.style.opacity = '1';
+                        submitBtn.style.cursor = 'pointer';
+                        submitBtn.textContent = 'Submit Payment';
+                    }
+                    
+                    return false;
+                }
+                
+                // Mark UTR as used BEFORE form submission
+                // This prevents duplicate submissions even if the user refreshes
+                addUTRtoDB(utr);
+                
+                // Get order ID from URL
+                const orderId = getQueryParam('orderId');
+                if (!orderId) {
+                    subtitle.textContent = 'Missing orderId. Open this page from the registration redirect.';
+                    subtitle.style.color = '#ff6b6b';
+                    return false;
+                }
+                
+                // Prepare form data
+                const fd = new FormData();
+                fd.append('action', 'payment');
+                fd.append('orderId', orderId);
+                fd.append('utr', utr);
+                fd.append('payer', payerInput.value.trim());
+                
+                try {
+                    // Show loading overlay
+                    const overlay = document.getElementById('pay-loading');
+                    if (overlay) overlay.style.display = 'flex';
+                    
+                    // Submit to server
+                    const resp = await fetch(ENDPOINT_URL, { method: 'POST', body: fd });
+                    const raw = await resp.text();
+                    let result = {};
+                    
+                    try { 
+                        result = JSON.parse(raw || '{}'); 
+                    } catch(e) { 
+                        /* non-json error */ 
+                    }
+                    
+                    if (!resp.ok || !result.success) {
+                        const errMsg = (result && result.message) ? result.message : (raw || ('HTTP '+resp.status));
+                        throw new Error(errMsg);
+                    }
+                    
+                } catch (err) {
+                    console.error('Payment upload failed:', err);
+                    subtitle.textContent = 'Payment upload failed. Please try again.';
+                    subtitle.style.color = '#ff6b6b';
+                    const pErr = document.getElementById('payerError');
+                    if (pErr) { 
+                        pErr.style.display = 'block'; 
+                        pErr.textContent = (err && err.message) ? err.message : 'Upload error'; 
+                    }
+                    
+                    // Re-enable submit button
+                    if (submitBtn) {
+                        submitBtn.disabled = false;
+                        submitBtn.style.opacity = '1';
+                        submitBtn.style.cursor = 'pointer';
+                        submitBtn.textContent = 'Submit Payment';
+                    }
+                    
+                    return false;
+                } finally {
+                    const overlay = document.getElementById('pay-loading');
+                    if (overlay) overlay.style.display = 'none';
+                }
+                
+                // Show success message
+                title.style.display = 'none';
+                subtitle.style.display = 'none';
+                qr.style.display = 'none';
+                instruction.style.display = 'none';
+                form.style.display = 'none';
+                successBox.style.display = 'block';
+                
+                // Redirect after 5 seconds
+                setTimeout(function() {
+                    window.location.href = 'index.html';
+                }, 5000);
+                
+                return false;
+            });
+            
+            // Initialize database when form is set up
+            initDatabase().catch(error => {
+                console.error("Failed to initialize database:", error);
+                // Fallback to memory-only mode if IndexedDB fails
+            });
+        }
+        
+        // Initialize form when DOM is loaded
+        window.addEventListener('DOMContentLoaded', setupPaymentForm);
+    </script>
+    
+</head>
+<body>
+    <script>
+        // UTR validation system enabled
+        // We're keeping localStorage and sessionStorage functionality
+    </script>
+    <div class="container">
+        <div class="card">
+            <div class="card-header">
+                <i class="fas fa-shield-alt" style="color:#ffd700;font-size:18px"></i>
+                <div>
+                    <h1 class="title">Secure UPI Payment</h1>
+                    <p class="subtitle">Use any UPI app to scan and pay</p>
+                </div>
+            </div>
+            <div class="card-body">
+<img src="QR1.jpeg" alt="Payment QR" class="qr">
+
+            <div class="instruction">
+                Please pay ₹300, then enter your 12-digit UTR number and the account holder / payer name used for payment.
+                <div class="steps">
+                    <div class="step"><strong>Step 1</strong> Scan QR in your UPI app</div>
+                    <div class="step"><strong>Step 2</strong> Complete payment</div>
+                    <div class="step"><strong>Step 3</strong> Enter UTR & payer name</div>
+                </div>
+                <div class="app-row">
+                    <i class="fab fa-google-pay" title="GPay" style="color:#9ad0ff"></i>
+                    <i class="fab fa-apple-pay" title="Apple Pay" style="color:#ffffff"></i>
+                    <i class="fas fa-university" title="Bank Apps" style="color:#ffd700"></i>
+                </div>
+                <div class="badge-secure"><i class="fas fa-lock"></i> Your details are kept private and secure</div>
+            </div>
+
+            <form id="paymentForm" novalidate>
+                <div class="form-group">
+                    <label for="utr">UTR Number (12 digits)</label>
+                    <i class="fas fa-hashtag"></i>
+                    <input id="utr" type="text" inputmode="numeric" placeholder="Enter 12-digit UTR" maxlength="12" required>
+                    <div id="utrError" class="error-message">Please enter a valid 12-digit UTR number</div>
+                </div>
+
+                <div class="form-group">
+                    <label for="payerName">enter account holder name</label>
+                    <i class="fas fa-user"></i>
+                    <input id="payerName" type="text" placeholder="enter account holder name" required>
+                    <div id="payerError" class="error-message">Please enter payer name</div>
+                </div>
+
+                <button type="submit" class="btn">Submit <i class="fas fa-arrow-right"></i></button>
+                <div class="note">We will verify your payment against the provided UTR</div>
+            </form>
+
+            <div id="successBox" class="success-box">
+                <h2>Thank you for registering.</h2>
+                <p>We will update you within 24 hours.</p>
+                <p>Redirecting to home in 5 seconds...</p>
+            </div>
+            </div>
+        </div>
+    </div>
+    <!-- Loading Overlay -->
+    <div id="pay-loading" class="loading-overlay">
+        <div class="loading-spinner"></div>
+        <div class="loading-text">Processing payment...</div>
+    </div>
+</body>
+<!-- Blank page -->
+<!-- If needed later, we can show a message or spinner here. -->
+</html>
+
